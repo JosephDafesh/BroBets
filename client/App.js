@@ -1,13 +1,19 @@
 import React from "react";
+import Navbar from "./Navbar";
+import Dashboard from "./Dashboard";
 import {
-    HashRouter as Router,
+    BrowserRouter as Router,
     Routes,
     Route,
   } from "react-router-dom";
 
 function App(){
     return (
-        <div>hi</div>
+        <Router>
+            <Routes>
+                <Route path="/" element={<Dashboard />} />
+            </Routes>
+        </Router>
     )
 }
 
