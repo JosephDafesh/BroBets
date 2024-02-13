@@ -39,11 +39,11 @@ router.get(
   (req, res) => res.status(200).send(res.locals.questionnaire)
 );
 
-router.post('/post-answers', (req, res) =>
+router.post('/post-answers', eventController.postAnswers, (req, res) =>
   res.status(200).send({ message: 'posted answers successfully' })
 );
 
-router.get('/events/:user_id', (req, res) =>
+router.get('/events/:user_id', eventController.getEventsForUser, (req, res) =>
   res.status(200).send(res.locals.events)
 );
 

@@ -211,6 +211,36 @@ const postAnswers = async (req, res, next) => {
   }
 };
 
+const getEventsForUser = async (req, res, next) => {
+  const { user_id } = req.params;
+  try {
+    const scoreQueryRes = await db.query(
+      'SELECT * FROM scores WHERE user_id = $1;',
+      [user_id]
+    );
+    const events = scoreQueryRes.rows;
+    res.locals.events = [];
+    for (const { event_id } of events) {
+      const eventQueryRes = await db.query(
+        'SELECT event_title, created_at, has_ended, total_points, players_count ' +
+          'FROM events WHERE event_id = $1;',
+        [event_id]
+      );
+      const event = events.find((item) => (item.event_id = event_id));
+      res.locals.events.push({ ...event, ...eventQueryRes.rows[0] });
+    }
+    return next();
+  } catch (e) {
+    return next({
+      log:
+        'Express Caught eventController.getEventsForUser middleware error' + e,
+      message: {
+        err: 'An error occurred when getting events that user participated' + e,
+      },
+    });
+  }
+};
+
 module.exports = {
   getLeaderboard,
   newEvent,
@@ -220,4 +250,5 @@ module.exports = {
   getQuestionnaire,
   updateRanking,
   postAnswers,
+  getEventsForUser,
 };
