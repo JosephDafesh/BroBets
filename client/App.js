@@ -14,27 +14,34 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
   
 
-function App(){
-    const [currentForm, setCurrentForm] = useState('login');
+function App() {
+  const [currentForm, setCurrentForm] = useState('login');
 
-    const toggleForm = (formName) => {
-        setCurrentForm(formName)
-    }
+  const toggleForm = (formName) => {
+    setCurrentForm(formName);
+  };
 
-    return (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<NewEvent />} />
-                    {/* <Route path="/" element={<>{currentForm === "login" ? (<SignIn onFormSwitch={toggleForm} />) : (<SignUp onFormSwitch={toggleForm} />)}</> } /> */}
-                    <Route path="/signin" element={<SignIn />} />
-                    <Route path="/signup" element={<SignUp />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/newevent" element={<NewEvent />} />
-                </Routes>
-            </Router>
-        </LocalizationProvider>
-    )
+  return (
+    <Router>
+      <Routes>
+        <Route
+          path='/'
+          element={
+            <>
+              {currentForm === 'login' ? (
+                <SignIn onFormSwitch={toggleForm} />
+              ) : (
+                <SignUp onFormSwitch={toggleForm} />
+              )}
+            </>
+          }
+        />
+        <Route path='/signin' element={<SignIn />} />
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='/dashboard' element={<Dashboard />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
