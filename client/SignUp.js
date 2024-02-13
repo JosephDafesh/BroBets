@@ -16,12 +16,14 @@ import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+    <Typography
+      variant='body2'
+      color='text.secondary'
+      align='center'
+      {...props}
+    >
       {'Copyright © '}
-      <a color="inherit">
-        BroBets
-      </a>{' '}
-      {new Date().getFullYear()}
+      <a color='inherit'>BroBets</a> {new Date().getFullYear()}
       {'.'}
     </Typography>
   );
@@ -31,20 +33,31 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignUp({onFormSwitch}) {
-
-  const handleSubmit = (event) => {
+export default function SignUp({ onFormSwitch }) {
+  const navigate = useNavigate;
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const body = {
       email: data.get('email'),
       password: data.get('password'),
+      firstName: data.get('firstName'),
+      lastName: data.get('lastName'),
+    };
+    const response = await fetch('user/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
     });
+    if (response.ok) {
+      console.log('Signup Successfully');
+      navigate('/dashboard');
+    }
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container component='main' maxWidth='xs'>
         <CssBaseline />
         <Box
           sx={{
@@ -57,19 +70,24 @@ export default function SignUp({onFormSwitch}) {
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component='h1' variant='h5'>
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box
+            component='form'
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoComplete="given-name"
-                  name="firstName"
+                  autoComplete='given-name'
+                  name='firstName'
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id='firstName'
+                  label='First Name'
                   autoFocus
                 />
               </Grid>
@@ -77,48 +95,48 @@ export default function SignUp({onFormSwitch}) {
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
+                  id='lastName'
+                  label='Last Name'
+                  name='lastName'
+                  autoComplete='family-name'
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  id='email'
+                  label='Email Address'
+                  name='email'
+                  autoComplete='email'
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
+                  name='password'
+                  label='Password'
+                  type='password'
+                  id='password'
+                  autoComplete='new-password'
                 />
               </Grid>
             </Grid>
             <Button
-              type="submit"
+              type='submit'
               fullWidth
-              variant="contained"
+              variant='contained'
               sx={{ mt: 3, mb: 2 }}
             >
               Sign Up
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent='flex-end'>
               <Grid item>
-                <Link href="#" variant="body2">
-                    <span onClick={() => onFormSwitch('login')}>
+                <Link href='#' variant='body2'>
+                  <span onClick={() => onFormSwitch('login')}>
                     Already have an account? Sign in
-                    </span>
+                  </span>
                 </Link>
               </Grid>
             </Grid>
