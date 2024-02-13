@@ -2,7 +2,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  // mode: 'production',
   mode: process.env.NODE_ENV || 'development',
   entry: './client/index.js',
   output: {
@@ -61,6 +60,6 @@ module.exports = {
       directory: path.join(__dirname, 'build'),
     },
     proxy: { '/**': 'http://localhost:3000' }, //added this to do postman requests
-    port: 8080,
+    port: 8081,
   },
 };
