@@ -7,18 +7,7 @@ const getLeaderboard = async (req, res, next) => {
       'SELECT * FROM scores WHERE event_id = $1;',
       [event_id]
     );
-    const scores = scoreQueryRes.rows;
-    const userIds = scores.map((row) => row.user_id);
-    const userQueryRes = await db.query(
-      'SELECT user_id, username FROM users WHERE user_id = ANY($1::int[])',
-      [userIds]
-    );
-    const users = userQueryRes.rows;
-    users.forEach(({ user_id, username }) => {
-      const score = scores.find((item) => item.user_id === user_id);
-      score.username = username;
-    });
-    res.locals.leaderboard = scores;
+    res.locals.leaderboard = scoreQueryRes.rows[0];
     return next();
   } catch (err) {
     return next({
@@ -176,6 +165,52 @@ const getQuestionnaire = async (req, res, next) => {
   }
 };
 
+const postAnswers = async (req, res, next) => {
+  const { user_id, nickname, event_id, answers } = req.body;
+
+  try {
+    // Check if missed last_call
+    const eventQueryRes = await db.query(
+      'SELECT last_call FROM events WHERE events_id = $1;',
+      [event_id]
+    );
+    const { last_call } = eventQueryRes.rows[0];
+    if (Date.now() > new Date(last_call).getTime()) {
+      return res.status(400).send({ message: 'You missed the last call.' });
+    }
+
+    // Update the players_count in events table
+    await db.query(
+      'UPDATE events SET players_count = players_count + 1 WHERE event_id = $1;',
+      [event_id]
+    );
+
+    // Insert a row in scores
+    await db.query(
+      'INSERT INTO scores (user_id, nickname, event_id) ' +
+        'VALUES( $1, $2, $3);',
+      [user_id, nickname, event_id]
+    );
+
+    // Insert into answers table
+    for (const { bet_id, answer } of answers) {
+      await db.query(
+        'INSERT INTO answers (user_id, bet_id, answer) ' +
+          'VALUES($1, $2, $3);',
+        [user_id, bet_id, answer]
+      );
+    }
+    return next();
+  } catch (e) {
+    return next({
+      log: 'Express Caught eventController.postAnswers middleware error' + e,
+      message: {
+        err: 'An error occurred when getting the postAnswers of an event' + e,
+      },
+    });
+  }
+};
+
 module.exports = {
   getLeaderboard,
   newEvent,
@@ -184,4 +219,5 @@ module.exports = {
   setEventEnd,
   getQuestionnaire,
   updateRanking,
+  postAnswers,
 };

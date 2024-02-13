@@ -13,7 +13,8 @@ CREATE TABLE events (
   last_call TIMESTAMP,
   has_ended BOOLEAN,
   admin INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-  total_points NUMERIC
+  total_points NUMERIC,
+  players_count NUMERIC
 );
 
 CREATE TABLE bets (
@@ -28,8 +29,7 @@ CREATE TABLE bets (
 CREATE TABLE answers (
   bet_id INTEGER NOT NULL REFERENCES bets(bet_id) ON DELETE CASCADE,
   answer VARCHAR(255),
-  user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-  points INTEGER NOT NULL
+  user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE scores (
@@ -37,6 +37,5 @@ CREATE TABLE scores (
   nickname VARCHAR(255),
   event_id INTEGER NOT NULL REFERENCES events(event_id) ON DELETE CASCADE,
   score NUMERIC,
-  place NUMERIC,
-  players_count NUMERIC
+  place NUMERIC
 );

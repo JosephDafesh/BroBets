@@ -39,4 +39,12 @@ router.get(
   (req, res) => res.status(200).send(res.locals.questionnaire)
 );
 
+router.post('/post-answers', (req, res) =>
+  res.status(200).send({ message: 'posted answers successfully' })
+);
+
+router.get('/events/:user_id', (req, res) =>
+  res.status(200).send(res.locals.events)
+);
+
 module.exports = router;
