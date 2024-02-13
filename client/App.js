@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "./Navbar";
+import EventAnswer from "./EventAnswer";
 import Dashboard from "./Dashboard";
 import SignIn from "./SignIn"
 import SignUp from "./SignUp"
@@ -24,7 +24,7 @@ function App() {
     <Router>
       <Routes>
         <Route
-          path='/'
+          path='/eve'
           element={
             <>
               {currentForm === 'login' ? (
@@ -38,6 +38,7 @@ function App() {
         <Route path='/signin' element={<SignIn />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/event' element={<EventAnswer />} />
         <Route path='/scoreboard' element={<ScoreBoard />} />
       </Routes>
     </Router>

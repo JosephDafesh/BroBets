@@ -3,10 +3,13 @@ import Navbar from "./Navbar";
 import JoinGame from "./joinGame";
 import CreateGame from "./createGame";
 import styles from "./styling/styles.css";
+import { useStore } from "./store";
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [events, setEvents] = useState([]);
+  // const setEvents = useStore(state => state.setEvents);
+  // const events = useStore(state => state.events);
 
   useEffect(() => {
     const fetchData = async () => {
