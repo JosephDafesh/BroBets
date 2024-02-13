@@ -61,13 +61,32 @@ userController.verifyUser = async (req, res, next) => {
       return res.status(400).send({ message: 'Password incorrect.' });
     }
     const { user_id } = user;
-    res.cookie('token', String(user_id));
+    res.cookie('user_id', String(user_id));
     return next();
   } catch (e) {
     return next({
       log: 'Express Caught eventController.createUser middleware error' + e,
       message: {
         err: 'An error occurred when creating new user' + e,
+      },
+    });
+  }
+};
+
+userController.getUser = async (req, res, next) => {
+  const user_id = req.cookies.user_id;
+  try {
+    const userQueryRes = await db.query(
+      'SELECT * FROM users WHERE user_id = $1;',
+      [user_id]
+    );
+    res.locals.user = userQueryRes.rows[0];
+    return next();
+  } catch (e) {
+    return next({
+      log: 'Express Caught eventController.getUser middleware error' + e,
+      message: {
+        err: 'An error occurred when getting user' + e,
       },
     });
   }
