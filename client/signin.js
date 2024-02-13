@@ -46,13 +46,12 @@ export default function SignIn({ onFormSwitch }) {
         password: data.get('password'),
       }),
     })
-      .then(async (data) => {
-        const response = await data.json();
-
+      .then(async (response) => {
         if (response.ok) {
           navigate('/dashboard');
         } else {
-          console.log(response.message);
+          const { message } = await response.json();
+          console.log(message);
         }
       })
       .catch((err) => {

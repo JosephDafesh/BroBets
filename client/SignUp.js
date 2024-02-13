@@ -51,7 +51,7 @@ export default function SignUp({ onFormSwitch }) {
     });
     if (response.ok) {
       console.log('Signup Successfully');
-      navigate('/dashboard');
+      navigate('/signin');
     }
   };
 

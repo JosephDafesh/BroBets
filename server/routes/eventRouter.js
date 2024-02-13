@@ -43,8 +43,10 @@ router.post('/post-answers', eventController.postAnswers, (req, res) =>
   res.status(200).send({ message: 'posted answers successfully' })
 );
 
-router.get('/events/:user_id', eventController.getEventsForUser, (req, res) =>
-  res.status(200).send(res.locals.events)
+router.get(
+  '/events-for/:user_id',
+  eventController.getEventsForUser,
+  (req, res) => res.status(200).send(res.locals.events)
 );
 
 module.exports = router;

@@ -4,6 +4,8 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
+const cookieParser = require('cookie-parser');
+
 const eventRouter = require('./routes/eventRouter');
 const userRouter = require('./routes/userRouter');
 
@@ -13,6 +15,7 @@ app.use((req, res, next) => {
   return next();
 });
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '../build')));
 
@@ -20,6 +23,8 @@ app.use(express.static(path.resolve(__dirname, '../build')));
 app.get('/', (req, res) =>
   res.status(200).sendFile(path.join(__dirname, '../build/index.html'))
 );
+
+app.get('/dashboard', (req, res) => res.redirect('/'));
 
 app.use('/event', eventRouter);
 app.use('/user', userRouter);
