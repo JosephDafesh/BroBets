@@ -4,8 +4,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -40,7 +38,7 @@ export default function SignIn({ onFormSwitch }) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    fetch('api/signin', {
+    fetch('user/signin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -51,10 +49,10 @@ export default function SignIn({ onFormSwitch }) {
       .then(async (data) => {
         const response = await data.json();
 
-        if (response === true) {
+        if (response.ok) {
           navigate('/dashboard');
         } else {
-          console.log('Incorrect username or password');
+          console.log(response.message);
         }
       })
       .catch((err) => {
