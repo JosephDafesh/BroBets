@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Dashboard from "./Dashboard";
+import SignIn from "./signin"
 import {
     BrowserRouter as Router,
     Routes,
@@ -11,10 +12,11 @@ function App(){
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Dashboard />} />
+                {/* <Route path="/" element={<SignIn />} /> */}
+                <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
         </Router>
     )
 }
 
-export default App
+export default App;
