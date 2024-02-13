@@ -19,9 +19,10 @@ function App(){
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<>{currentForm === "login" ? ( <SignIn onFormSwitch={toggleForm} /> ) : ( <SignUp onFormSwitch={toggleForm} />)}</> } />
+                <Route path="/" element={<>{currentForm === "login" ? (<SignIn onFormSwitch={toggleForm} />) : (<SignUp onFormSwitch={toggleForm} />)}</> } />
+                <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
-                {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+                <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
         </Router>
     )
