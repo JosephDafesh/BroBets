@@ -30,7 +30,10 @@ const newEvent = (req, res, next) => {
         'VALUES($1, $2, $3, $4, $5, $6);',
       [event_title, last_call, false, user_id, 0, new Date().toISOString()]
     )
-    .then(() => next())
+    .then((data) => {
+      res.locals.newEvent = data.rows[0];
+      return next();
+    })
     .catch((err) =>
       next({
         log: 'Express Caught eventController.newEvent middleware error' + err,
