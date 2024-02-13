@@ -64,7 +64,7 @@ export default function NavBar() {
               {/* Simplified Buttons without Typography and with a light blue color */}
               <Button sx={{ color: 'black' }}> Dashboard </Button>
               <Button sx={{ color: 'black' }}>Events </Button>
-              <Button sx={{ color: 'black' }}>Create Event </Button>
+              <Button sx={{ color: 'black' }} onClick={navigate('/newevent')}>Create Event </Button>
               <Button sx={{ color: 'black' }}>Something </Button>
               <Button sx={{ color: 'black' }}>Something else </Button>
             </Box>

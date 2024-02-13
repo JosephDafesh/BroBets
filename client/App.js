@@ -11,7 +11,6 @@ import {
   } from "react-router-dom";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
   
 
 function App() {
@@ -22,25 +21,29 @@ function App() {
   };
 
   return (
-    <Router>
-      <Routes>
-        <Route
-          path='/'
-          element={
-            <>
-              {currentForm === 'login' ? (
-                <SignIn onFormSwitch={toggleForm} />
-              ) : (
-                <SignUp onFormSwitch={toggleForm} />
-              )}
-            </>
-          }
-        />
-        <Route path='/signin' element={<SignIn />} />
-        <Route path='/signup' element={<SignUp />} />
-        <Route path='/dashboard' element={<Dashboard />} />
-      </Routes>
-    </Router>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Router>
+            <Routes>
+                <Route
+                path='/'
+                // element={<NewEvent />}
+                element={
+                    <>
+                    {currentForm === 'login' ? (
+                        <SignIn onFormSwitch={toggleForm} />
+                    ) : (
+                        <SignUp onFormSwitch={toggleForm} />
+                    )}
+                    </>
+                }
+                />
+                <Route path='/signin' element={<SignIn />} />
+                <Route path='/signup' element={<SignUp />} />
+                <Route path='/dashboard' element={<Dashboard />} />
+                <Route path='/newevent' element={<NewEvent />} />
+            </Routes>
+        </Router>
+    </LocalizationProvider>
   );
 }
 
