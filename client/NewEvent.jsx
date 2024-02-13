@@ -37,19 +37,17 @@ export default function NewEvent() {
         </Box>
         <Box>
             <Typography variant="h6">Create Bets</Typography>
-            <Chip label="Multiple Choice" />
-            <Chip label="Wild Card -- Player Input" />
+            <Chip label="Yes or No" />
+            <Chip label="Player Input" />
         </Box>
-        {addingBetType === 'Multiple Choice' && 
+        {addingBetType === 'Yes or No' && 
             <Box>
                 <TextField label="Question"/>
                 <TextField label="Option 1"/>
                 <TextField label="Option 2"/>
-                <TextField label="Option 3"/>
-                <TextField label="Option 4"/>
             </Box>
         }
-        {addingBetType === 'Wild Card -- Player Input' && 
+        {addingBetType === 'Player Input' && 
             <Box>
                 <TextField label="Question"/>
             </Box>
