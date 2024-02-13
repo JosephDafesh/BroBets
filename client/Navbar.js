@@ -17,6 +17,10 @@ export default function NavBar() {
     navigate('/');
   };
 
+  const handleScoreBoardClick = () => {
+    navigate('/scoreboard');
+  }
+
   return (
     <AppBar
       position='fixed'
@@ -65,7 +69,7 @@ export default function NavBar() {
               <Button sx={{ color: 'black' }}> Dashboard </Button>
               <Button sx={{ color: 'black' }}>Events </Button>
               <Button sx={{ color: 'black' }}>Create Event </Button>
-              <Button sx={{ color: 'black' }}>Something </Button>
+              <Button sx={{ color: 'black' }} onClick={handleScoreBoardClick}>ScoreBoard </Button>
               <Button sx={{ color: 'black' }}>Something else </Button>
             </Box>
           </Box>
