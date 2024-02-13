@@ -23,11 +23,20 @@ router.post(
   (req, res) => res.status(200).send(res.locals.newLeaderboard)
 );
 
+router.post('/end/:event_id', eventController.setEventEnd, (req, res) =>
+  res.status(200).send({ message: 'set an event to be ended successfully' })
+);
+
 router.post(
-  '/end/:event_id',
-  eventController.setEventEnd,
-  eventController.getLeaderboard,
-  (req, res) => res.status(200).send(res.locals.leaderboard)
+  '/update-ranking/:event_id',
+  eventController.updateRanking,
+  eventController.getLeaderboard
+);
+
+router.get(
+  '/get-questionnaire/:event_id',
+  eventController.getQuestionnaire,
+  (req, res) => res.status(200).send(res.locals.questionnaire)
 );
 
 module.exports = router;

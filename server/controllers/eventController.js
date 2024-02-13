@@ -33,13 +33,13 @@ const getLeaderboard = async (req, res, next) => {
 
 const newEvent = (req, res, next) => {
   const { user_id } = req.params;
-  const { event_title, final_bets_in } = req.body;
+  const { event_title, last_call } = req.body;
   return db
     .query(
       'INSERT INTO events ' +
-        '(event_title, final_bets_in, has_ended, admin, total_points) ' +
-        'VALUES($1, $2, $3, $4, $5);',
-      [event_title, final_bets_in, false, user_id, 0]
+        '(event_title, last_call, has_ended, admin, total_points, created_at) ' +
+        'VALUES($1, $2, $3, $4, $5, $6);',
+      [event_title, last_call, false, user_id, 0, new Date().toISOString()]
     )
     .then(() => next())
     .catch((err) =>
@@ -120,19 +120,11 @@ const updateCorrectAnswer = async (req, res, next) => {
 
 const setEventEnd = async (req, res, next) => {
   const { event_id } = req.params;
-  const { playerRanking } = req.params;
   try {
     await db.query('UPDATE events SET has_ended = $1 WHERE event_id = $2;', [
       true,
       event_id,
     ]);
-    // Update final ranking of users
-    for (const { user_id, place } of playerRanking) {
-      await db.query(
-        'UPDATE scores SET place = $1 WHERE user_id = $2 AND event_id = $3;',
-        [place, user_id, event_id]
-      );
-    }
     return next();
   } catch (e) {
     return next({
@@ -144,10 +136,52 @@ const setEventEnd = async (req, res, next) => {
   }
 };
 
+const updateRanking = async (req, res, next) => {
+  const { playerRanking } = req.body;
+  try {
+    for (const { user_id, place } of playerRanking) {
+      await db.query(
+        'UPDATE scores SET place = $1 WHERE user_id = $2 AND event_id = $3;',
+        [place, user_id, event_id]
+      );
+    }
+    return next();
+  } catch (e) {
+    return next({
+      log: 'Express Caught eventController.updateRanking middleware error' + e,
+      message: {
+        err: 'An error occurred when updating ranking of an event' + e,
+      },
+    });
+  }
+};
+
+const getQuestionnaire = async (req, res, next) => {
+  const { event_id } = req.params;
+  try {
+    const betQueryRes = await db.query(
+      'SELECT type, question, points FROM bets WHERE event_id = $1;',
+      [event_id]
+    );
+    res.locals.questionnaire = betQueryRes.rows;
+    return next();
+  } catch (e) {
+    return next({
+      log:
+        'Express Caught eventController.getQuestionnaire middleware error' + e,
+      message: {
+        err: 'An error occurred when getting the questionnaire of an event' + e,
+      },
+    });
+  }
+};
+
 module.exports = {
   getLeaderboard,
   newEvent,
   newBet,
   updateCorrectAnswer,
   setEventEnd,
+  getQuestionnaire,
+  updateRanking,
 };
