@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Button, TextField, Card, CardContent, Typography, FormControl, RadioGroup, FormControlLabel, Radio, Paper } from '@mui/material';
 
 export default function Questionnaire({ eventId, userId }) {
   const [questions, setQuestions] = useState([]); // State to hold the questions
@@ -49,6 +49,14 @@ export default function Questionnaire({ eventId, userId }) {
     .catch(error => console.error('Error submitting answers:', error));
   };
 
+  const cardStyle = {
+    marginBottom: 2,
+    width: '60vw', 
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  };
+
+
   return (
     <div>
       <TextField
@@ -63,6 +71,7 @@ export default function Questionnaire({ eventId, userId }) {
         sx={{ marginBottom: 2 }}
       />
       {questions.map(question => (
+         <Paper key={question.bet_id} elevation={3} sx={cardStyle}>
         <Card key={question.bet_id} sx={{ marginBottom: 2 }}>
           <CardContent>
             <Typography variant="h6">{question.question}</Typography>
@@ -92,6 +101,7 @@ export default function Questionnaire({ eventId, userId }) {
             )}
           </CardContent>
         </Card>
+        </Paper>
       ))}
       <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ marginTop: 2 }}>
         Submit Answers

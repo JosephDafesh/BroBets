@@ -35,9 +35,15 @@ export default function EventAnswer() {
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <Navbar />
-      <Box style={{ paddingTop: '70px' }}>
-      <Questionnaire user_id={user}/>
-        </Box>
+      <Box style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        height: '100vh', 
+        width: '100%', 
+        paddingTop: '12vh'
+      }}>
+        <Questionnaire user_id={user} />
+      </Box>
     </div>
   );
 }

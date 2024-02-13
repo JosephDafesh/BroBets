@@ -1,10 +1,13 @@
 import React, {useState, useEffect} from "react";
 import Navbar from "./Navbar";
 import Questionnaire from "./Questionnaire";
+import { useStore } from './store';
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [events, setEvents] = useState([]);
+  // const setEvents = useStore(state => state.setEvents);
+  // const events = useStore(state => state.events);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +38,6 @@ export default function Dashboard() {
       {/* <h1>Dashboard</h1>
       <button>hello</button> */}
       <Navbar />
-      <Questionnaire user_id={user}/>
     </div>
   );
 }
