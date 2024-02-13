@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "./Navbar";
 import Dashboard from "./Dashboard";
 import SignIn from "./SignIn"
 import SignUp from "./SignUp"
@@ -20,10 +19,10 @@ function App(){
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<>{currentForm === "login" ? (<SignIn onFormSwitch={toggleForm} />) : (<SignUp onFormSwitch={toggleForm} />)}</> } />
+                <Route path="/a" element={<>{currentForm === "login" ? (<SignIn onFormSwitch={toggleForm} />) : (<SignUp onFormSwitch={toggleForm} />)}</> } />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
-                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/" element={<Dashboard />} />
             </Routes>
         </Router>
     )
