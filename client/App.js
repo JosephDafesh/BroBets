@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
-import EventAnswer from './EventAnswer';
-import Dashboard from './Dashboard';
-import SignIn from './signin';
-import SignUp from './SignUp';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState } from "react";
+import EventAnswer from "./EventAnswer";
+import Dashboard from "./Dashboard";
+import SignIn from "./SignIn"
+import SignUp from "./SignUp"
+import NewEvent from "./NewEvent"
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+  } from "react-router-dom";
+import ScoreBoard from './ScoreBoard';
+
+  
 
 function App() {
   const [currentForm, setCurrentForm] = useState('login');
@@ -30,7 +38,8 @@ function App() {
         <Route path='/signin' element={<SignIn />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/' element={<EventAnswer />} />
+        <Route path='/event' element={<EventAnswer />} />
+        <Route path='/scoreboard' element={<ScoreBoard />} />
       </Routes>
     </Router>
   );

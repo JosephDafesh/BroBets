@@ -24,13 +24,10 @@ app.get('/', (req, res) =>
   res.status(200).sendFile(path.join(__dirname, '../build/index.html'))
 );
 
-app.get('/dashboard', (req, res) => res.redirect('/'));
-
 app.use('/event', eventRouter);
 app.use('/user', userRouter);
 
-// 404 Error Handler
-app.get('*', (req, res) => res.status(404).send('Page not found'));
+app.get('*', (req, res) => res.redirect('/'));
 
 // Global Error Handler
 app.use((err, req, res, next) => {
