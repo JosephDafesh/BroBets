@@ -2,7 +2,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  mode: "production",
+  // mode: 'production',
+  mode: process.env.NODE_ENV || 'development',
   entry: './client/index.js',
   output: {
     filename: 'bundle.js',
@@ -55,7 +56,6 @@ module.exports = {
     client: {
       overlay: false,
     },
-
     static: {
       publicPath: '/build',
       directory: path.join(__dirname, 'build'),
