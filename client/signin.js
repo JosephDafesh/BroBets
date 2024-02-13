@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -39,6 +39,15 @@ export default function SignIn({onFormSwitch}) {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
     
+      fetch('api/signin', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(
+            {
+                usernam
+            }
+        )
+      })
     };
 
   return (
