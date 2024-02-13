@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from "react";
 import Navbar from "./Navbar";
 import Questionnaire from "./Questionnaire";
+import { Box } from "@mui/material";
 
-export default function Dashboard() {
+export default function EventAnswer() {
   const [user, setUser] = useState(null);
   const [events, setEvents] = useState([]);
 
@@ -22,6 +23,7 @@ export default function Dashboard() {
         });
         if (eventsRes.ok) {
           const e = await eventsRes.json();
+          console.log(e)
           setEvents(e);
         }
       }
@@ -31,11 +33,11 @@ export default function Dashboard() {
 
   console.log('user is', user);
   return (
-    <div>
-      {/* <h1>Dashboard</h1>
-      <button>hello</button> */}
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
       <Navbar />
+      <Box style={{ paddingTop: '70px' }}>
       <Questionnaire user_id={user}/>
+        </Box>
     </div>
   );
 }
