@@ -4,6 +4,8 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
+const eventRouter = require('./routes/eventRouter');
+
 // logging the endpoint that got hit
 app.use((req, res, next) => {
   console.log(`${req.method} request for '${req.url}'`);
@@ -17,6 +19,8 @@ app.use(express.static(path.resolve(__dirname, '../index.html')));
 app.get('/', (req, res) =>
   res.status(200).sendFile(path.join(__dirname, '../index.html'))
 );
+
+app.use('/event', eventRouter);
 
 // 404 Error Handler
 app.get('*', (req, res) => res.status(404).send('Page not found'));

@@ -6,9 +6,12 @@ const pool = new Pool({
 });
 
 module.exports = {
-  query: (text, params, callback) => {
+  query: (text, params) => {
     console.log('executed query', text);
-    return pool.query(text, params, callback);
+    return pool.query(text, params).catch((e) => {
+      console.error('Error executing query', e.stack);
+      throw e;
+    });
   },
   end: pool.end,
 };
