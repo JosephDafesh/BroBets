@@ -13,11 +13,11 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use(express.static(path.resolve(__dirname, '../index.html')));
+app.use(express.static(path.resolve(__dirname, '../build')));
 
 // serving a static html
 app.get('/', (req, res) =>
-  res.status(200).sendFile(path.join(__dirname, '../index.html'))
+  res.status(200).sendFile(path.join(__dirname, '../build/index.html'))
 );
 
 app.use('/event', eventRouter);
