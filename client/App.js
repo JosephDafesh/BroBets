@@ -9,9 +9,8 @@ import {
     Routes,
     Route,
   } from "react-router-dom";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
+import ScoreBoard from './ScoreBoard';
+
   
 
 function App() {
@@ -39,6 +38,7 @@ function App() {
         <Route path='/signin' element={<SignIn />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/scoreboard' element={<ScoreBoard />} />
       </Routes>
     </Router>
   );
