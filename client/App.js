@@ -1,11 +1,11 @@
 import React from "react";
-import Navbar from "./Navbar";
 import Dashboard from "./Dashboard";
 import {
     BrowserRouter as Router,
     Routes,
     Route,
   } from "react-router-dom";
+  
 
 function App(){
     return (
@@ -17,4 +17,4 @@ function App(){
     )
 }
 
-export default App
+export default App;
