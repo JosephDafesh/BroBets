@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import Navbar from './Navbar';
+import React, { useEffect, useState } from "react";
+import Navbar from "./Navbar";
+import JoinGame from "./joinGame";
+import CreateGame from "./createGame";
+import styles from "./styling/styles.css";
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
@@ -7,17 +10,17 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const userRes = await fetch('user/get', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+      const userRes = await fetch("user/get", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
       });
       if (userRes.ok) {
         const u = await userRes.json();
-        console.log('user from db is', u);
+        console.log("user from db is", u);
         setUser(u);
         const eventsRes = await fetch(`/event/events-for/${u.user_id}`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
         });
         if (eventsRes.ok) {
           const e = await eventsRes.json();
@@ -28,12 +31,18 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  console.log('user is', user);
+  console.log("user is", user);
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <button>hello</button>
-      <Navbar />
+    <div id="dashboard">
+      <div id="navbar">
+        <Navbar />
+      </div>
+      <div id="dashboardContainers" align="center">
+        <CreateGame align="center" />
+        <div>OR</div>
+        <br></br>
+        <JoinGame />
+      </div>
     </div>
   );
 }
