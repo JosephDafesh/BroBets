@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -33,6 +33,13 @@ const defaultTheme = createTheme();
 
 export default function SignIn({ onFormSwitch }) {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const cookies = document.cookie.split('; ');
+    cookies.forEach((cookie) => {
+      if (cookie.includes('user_id')) navigate('/dashboard');
+    });
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();

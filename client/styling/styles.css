@@ -1,0 +1,16 @@
+#dashboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+#navbar {
+  display: flex;
+  position: absolute;
+  justify-content: top;
+}
+
+#dashboardContainers {
+  display: flex;
+  flex-direction: column-reverse;
+}

@@ -78,6 +78,7 @@ export default function NewEvent() {
       }),
     });
     const addEventData = await addEventResponse.json();
+    setEvent_id(addEventData);
     console.log('addEventData:', addEventData);
   };
 

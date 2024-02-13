@@ -27,10 +27,15 @@ const newEvent = (req, res, next) => {
     .query(
       'INSERT INTO events ' +
         '(event_title, last_call, has_ended, admin, total_points, created_at) ' +
-        'VALUES($1, $2, $3, $4, $5, $6);',
+        'VALUES($1, $2, $3, $4, $5, $6) RETURNING event_id;',
       [event_title, last_call, false, user_id, 0, new Date().toISOString()]
     )
-    .then(() => next())
+    .then((data) => {
+      console.log('newEvent rows:', data.rows)
+      res.locals.newEvent_id = data.rows[0];
+      console.log('newEvent:', res.locals.newEvent)
+      return next();
+    })
     .catch((err) =>
       next({
         log: 'Express Caught eventController.newEvent middleware error' + err,
