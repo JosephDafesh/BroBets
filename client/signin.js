@@ -33,7 +33,7 @@ const defaultTheme = createTheme();
 
 export default function SignIn({onFormSwitch}) {
     
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
       event.preventDefault();
@@ -44,9 +44,21 @@ export default function SignIn({onFormSwitch}) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(
             {
-                usernam
-            }
-        )
+                username: data.get('username'),
+                password: data.get('password')
+            })
+      })
+      .then(async data => {
+        const response = await data.json();
+
+        if(response === true) {
+            navigate('/dashboard')
+        }  else {
+            console.log('Incorrect username or password');
+        }
+      })
+      .catch(err => {
+        console.log(err, 'error when logging in')
       })
     };
 
