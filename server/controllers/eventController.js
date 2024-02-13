@@ -30,4 +30,29 @@ const getLeaderboard = async (req, res, next) => {
   }
 };
 
-module.exports = { getLeaderboard };
+const newEvent = async (req, res, next) => {
+  const { userId } = req.params;
+  const { event_title, final_bets_in } = req.body;
+  return db
+    .query(
+      'INSERT INTO events ' +
+        '(event_title, final_bets_in, has_ended, admin, total_points) ' +
+        'VALUES($1, $2, $3, $4, $5) ' +
+        'RETURNING *;',
+      [event_title, final_bets_in, false, userId, 0]
+    )
+    .then((data) => {
+      res.locals.newEvent = data.rows[0];
+      return next();
+    })
+    .catch((err) =>
+      next({
+        log: 'Express Caught eventController.newEvent middleware error' + err,
+        message: {
+          err: 'An error occurred when adding a new event' + err,
+        },
+      })
+    );
+};
+
+module.exports = { getLeaderboard, newEvent };
