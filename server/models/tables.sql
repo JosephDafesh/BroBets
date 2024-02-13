@@ -24,7 +24,7 @@ CREATE TABLE bets (
 );
 
 CREATE TABLE answers (
-  question_id INTEGER NOT NULL REFERENCES bets(bet_id) ON DELETE CASCADE,
+  bet_id INTEGER NOT NULL REFERENCES bets(bet_id) ON DELETE CASCADE,
   answer VARCHAR(255),
   user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE
 );
