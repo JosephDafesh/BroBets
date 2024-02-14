@@ -94,9 +94,16 @@ const updateCorrectAnswer = async (req, res, next) => {
     const answers = answerQueryRes.rows;
     const newLeaderboard = [];
     for (const { user_id, answer } of answers) {
+      const scoreQueryRes1 = await db.query(
+        'SELECT score FROM scores WHERE user_id = $1 AND event_id = $2',
+        [user_id, event_id]
+      );
+      let { score } = scoreQueryRes1.rows[0];
+      if (!score) score = 0;
+      score += answer === correct_answer ? points : 0;
       const scoreQueryRes = await db.query(
-        'UPDATE scores SET score = score + $1 WHERE user_id = $2 AND event_id = $3 RETURNING user_id, score;',
-        [answer === correct_answer ? points : 0, user_id, event_id]
+        'UPDATE scores SET score = $1 WHERE user_id = $2 AND event_id = $3 RETURNING user_id, score;',
+        [score, user_id, event_id]
       );
       newLeaderboard.push(scoreQueryRes.rows[0]);
     }
@@ -134,6 +141,7 @@ const setEventEnd = async (req, res, next) => {
 
 const updateRanking = async (req, res, next) => {
   const { playerRanking } = req.body;
+  const { event_id } = req.params;
   try {
     for (const { user_id, place } of playerRanking) {
       await db.query(
@@ -188,7 +196,7 @@ const getQuestionnaire = async (req, res, next) => {
   const { event_id } = req.params;
   try {
     const betQueryRes = await db.query(
-      'SELECT type, question, points, bet_id FROM bets WHERE event_id = $1;',
+      'SELECT type, question, points, bet_id, correct_answer FROM bets WHERE event_id = $1;',
       [event_id]
     );
     res.locals.questionnaire = betQueryRes.rows;
@@ -335,7 +343,7 @@ const getAdminEvents = async (req, res, next) => {
 };
 
 const deleteEvent = async (req, res, next) => {
-  console.log('deleteEvent')
+  console.log('deleteEvent');
   const { event_id } = req.params;
   try {
     await db.query('DELETE FROM events WHERE event_id = $1;', [event_id]);
