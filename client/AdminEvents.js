@@ -6,6 +6,8 @@ import { useStore } from './store';
 export default function AdminEvents() {
   const { user_id } = useStore.getState();
   const [adminEvents, setAdminEvents] = useState([]);
+  const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
+  const setEvent_id = useStore((state) => state.setEvent_id);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,6 +20,10 @@ export default function AdminEvents() {
         setAdminEvents(events);
       } else {
         console.log('Fetching admin events for user failed');
+        setSnackbarMessage({
+          severity: 'error',
+          message: 'Fetching admin events for user failed',
+        });
       }
     };
     fetchData();
@@ -28,9 +34,16 @@ export default function AdminEvents() {
       method: 'DELETE',
     });
     if (response.ok) {
-      setAdminEvents(adminEvents.filter(e => e.event_id !== event_id));
+      setAdminEvents(adminEvents.filter((e) => e.event_id !== event_id));
+      setSnackbarMessage({
+        severity: 'success',
+        message: 'deleted event successfully',
+      });
     } else {
-      console.error('Failed to delete the event');
+      setSnackbarMessage({
+        severity: 'error',
+        message: 'deleted event failed',
+      });
     }
   };
 
@@ -48,10 +61,24 @@ export default function AdminEvents() {
         <Typography>You haven't created any events yet.</Typography>
       )}
       {adminEvents.map((e) => (
-        <Card key={e.event_id} sx={{ width: '100%', maxWidth: 800, my: 2, position: 'relative' }}>
-          <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+        <Card
+          key={e.event_id}
+          sx={{ width: '100%', maxWidth: 800, my: 2, position: 'relative' }}
+        >
+          <CardContent
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'start',
+            }}
+          >
             <Box>
-              <Typography variant='h5' component='h2'>
+              <Typography
+                variant='h5'
+                component='h2'
+                sx={{ cursor: 'pointer' }}
+                onClick={() => setEvent_id(e.event_id)}
+              >
                 {e.event_title}
               </Typography>
               <Typography color='textSecondary' gutterBottom>
@@ -65,9 +92,9 @@ export default function AdminEvents() {
               </Typography>
             </Box>
             <IconButton
-              aria-label="delete"
+              aria-label='delete'
               onClick={() => deleteEvent(e.event_id)}
-              sx={{ position: 'absolute', top: 10, right: 15, color: 'red'}}
+              sx={{ position: 'absolute', top: 10, right: 15, color: 'red' }}
             >
               <DeleteIcon />
             </IconButton>
