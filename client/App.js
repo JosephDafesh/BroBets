@@ -9,9 +9,9 @@ import {
     Routes,
     Route,
   } from "react-router-dom";
-import ScoreBoard from './ScoreBoard';
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AdminEvent from "./AdminEvent";
-
   
 
 function App() {
@@ -22,28 +22,28 @@ function App() {
   };
 
   return (
-    <Router>
-      <Routes>
-        <Route
-          path='/'
-          element={
-            <>
-              {currentForm === 'login' ? (
-                <SignIn onFormSwitch={toggleForm} />
-              ) : (
-                <SignUp onFormSwitch={toggleForm} />
-              )}
-            </>
-          }
-        />
-        <Route path='/signin' element={<SignIn />} />
-        <Route path='/signup' element={<SignUp />} />
-        <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/event' element={<EventAnswer />} />
-        <Route path='/scoreboard' element={<ScoreBoard />} />
-        <Route path='/newevent' element={<NewEvent />} />
-      </Routes>
-    </Router>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Router>
+        <Routes>
+            <Route
+            path='/'
+            element={
+                <>
+                {currentForm === 'login' ? (
+                    <SignIn onFormSwitch={toggleForm} />
+                ) : (
+                    <SignUp onFormSwitch={toggleForm} />
+                )}
+                </>
+            }
+            />
+            <Route path='/signin' element={<SignIn />} />
+            <Route path='/signup' element={<SignUp />} />
+            <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/newevent' element={<NewEvent />} />
+        </Routes>
+        </Router>
+    </LocalizationProvider>
   );
 }
 

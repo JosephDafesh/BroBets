@@ -10,7 +10,7 @@ router.get(
 );
 
 router.post('/new/:user_id', eventController.newEvent, (req, res) =>
-  res.status(200).send(res.locals.newEvent)
+  res.status(200).send(res.locals.newEvent_id)
 );
 
 router.post('/new-bet/:event_id', eventController.newBet, (req, res) =>

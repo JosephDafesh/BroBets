@@ -7,7 +7,7 @@
     "start": "NODE_ENV=production nodemon server/server.js",
     "start-react": "react-scripts start",
     "build": "webpack --mode production",
-    "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --open --hot --progress --color \" \"nodemon ./server/server.js\""
+    "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --open --hot --color \" \"nodemon ./server/server.js\""
   },
   "nodemonConfig": {
     "ignore": [
@@ -21,6 +21,7 @@
     "@date-io/date-fns": "^3.0.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@mui/base": "^5.0.0-beta.36",
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.10",
     "@mui/x-date-pickers": "^6.19.4",
