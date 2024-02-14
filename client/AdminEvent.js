@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Box,
   Button,
   TextField,
   Card,
@@ -11,241 +10,298 @@ import {
   FormControlLabel,
   Radio,
   Paper,
-  Chip,
+  CardActions,
 } from '@mui/material';
 import { useStore } from './store';
 
+const cardStyle = {
+  marginBottom: 2,
+  width: '60vw',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+};
+
 export default function AdminEvent() {
-  const [newBetPrompt, setNewBetPrompt] = useState('');
-  const [newBetType, setNewBetType] = useState(null);
-  const [newBetPoints, setNewBetPoints] = useState(1);
   const [questions, setQuestions] = useState([]);
-  const [correctAnswers, setCorrectAnswers] = useState({});
   const { event_id } = useStore.getState();
   const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
+  const [title, setTitle] = useState('');
+  const [correctAnswers, setCorrectAnswers] = useState({});
+  console.log('questions', questions);
 
-  //   const [questions, setQuestions] = useState([
-  //     { bet_id: '1', question: 'Is React a library for frontend development?', type: 'true_false' },
-  //     { bet_id: '2', question: 'What is the capital of France?', type: 'user_input' },
-  //     { bet_id: '3', question: 'Does JavaScript support functional programming?', type: 'true_false' },
-  //   ]);
-  //   const [correctAnswers, setCorrectAnswers] = useState({
-  //     '1': '', // Initialize with empty answers
-  //     '2': '',
-  //     '3': '',
-  //   });
-
-  //     useEffect(() => {
-  //     // Simulate fetching data
-  //     let initialCorrectAnswers = {};
-  //     questions.forEach(question => {
-  //       initialCorrectAnswers[question.bet_id] = ''; // Initialize answers
-  //     });
-  //     setCorrectAnswers(initialCorrectAnswers);
-  //   }, [questions]); // Dependency on questions to simulate effect
-
-  //   const handleAnswerChange = (betId, answer) => {
-  //     setCorrectAnswers(prev => ({ ...prev, [betId]: answer }));
-  //   };
-
-  //   const handleSubmitCorrectAnswers = () => {
-  //     // Here you would handle submitting the answers
-  //     console.log('Submitting correct answers:', correctAnswers);
-  //     alert('Correct answers submitted successfully (simulated)');
-  //   };
+  const handleChange = (e, q) => {
+    const newCorrectAnswers = { ...correctAnswers };
+    newCorrectAnswers[q.bet_id] = e.target.value;
+    setCorrectAnswers(newCorrectAnswers);
+  };
 
   useEffect(() => {
-    fetch(`event/get-questionnaire/${event_id}`)
-      // fetch(`/event/get-questionnaire/6`) // hard coded event_id
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('data in get questionnaire in addbets:', data);
-        setQuestions(data);
-        let initialCorrectAnswers = {};
-        if (data.length) {
-          data.forEach((question) => {
-            // what are we doing here
-            initialCorrectAnswers[question.bet_id] = '';
-          });
+    const fetchData = async () => {
+      const titleCreatorRes = await fetch(
+        `/event/title-and-creator/${event_id}`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
         }
-        setCorrectAnswers(initialCorrectAnswers);
-      })
-      .catch((error) =>
-        setSnackbarMessage({
-          severity: 'error',
-          message: 'Getting questionnaire failed: ' + error,
-        })
       );
+      if (titleCreatorRes.ok) {
+        const data = await titleCreatorRes.json();
+        setTitle(data.title);
+        const questionnaireRes = await fetch(
+          `/event/get-questionnaire/${event_id}`,
+          {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
+        if (questionnaireRes.ok) {
+          const q = await questionnaireRes.json();
+          console.log(q);
+          setQuestions(q);
+        } else {
+          console.log('Failed to get Questionnaire');
+        }
+      } else {
+        console.log('Faied to get title and creator');
+      }
+    };
+    fetchData();
   }, [event_id]);
 
-  const updateNewBetPrompt = (e) => {
-    setNewBetPrompt(e.target.value);
-    console.log('newBetPrompt:', e.target.value);
-  };
-
-  const updateNewBetPoints = (e) => {
-    setNewBetPoints(e.target.value);
-    console.log('newBetPoints:', e.target.value);
-  };
-
-  const handleAddBet = async () => {
-    const addBetRes = await fetch(`/event/new-bet/${event_id}`, {
-      // const addBetRes = await fetch(`/event/new-bet/6`, { // hard coded event_id
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        type: newBetType,
-        question: newBetPrompt,
-        points: newBetPoints,
-      }),
-    });
-    if (addBetRes.ok) {
-      const newBet = await addBetRes.json();
-      setQuestions((prev) => [...prev, ...newBet]);
-      setSnackbarMessage({
-        severity: 'success',
-        message: 'added bet successfully',
-      });
-    } else {
-      setSnackbarMessage({
-        severity: 'error',
-        message: 'Adding bet failed',
-      });
-    }
-  };
-
-  const handleAnswerChange = (betId, answer) => {
-    setCorrectAnswers((prev) => ({ ...prev, [betId]: answer }));
-  };
-
-  const handleSubmitCorrectAnswers = () => {
-    fetch('/update-correct-answer', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ event_id, correctAnswers }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to submit correct answers');
-        }
-        alert('Correct answers submitted successfully');
-      })
-      .catch((error) =>
-        setSnackbarMessage({
-          severity: 'error',
-          message: 'Error submitting correct answers:',
-          error,
-        })
-      );
-  };
-
-  const renderQuestion = (question, i) => {
-    return (
-      <Paper
-        key={i}
-        elevation={3}
-        sx={{
-          marginBottom: 2,
-          width: '60vw',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          marginTop: '100px',
-        }}
-      >
-        <Card>
-          <CardContent>
-            <Typography variant='h6'>{question.question}</Typography>
-            {question.type === 'true_false' ? (
-              <FormControl component='fieldset'>
-                <RadioGroup
-                  aria-label='Correct Answer'
-                  value={correctAnswers[question.bet_id] || ''}
-                  onChange={(e) =>
-                    handleAnswerChange(question.bet_id, e.target.value)
-                  }
-                >
-                  <FormControlLabel
-                    value='true'
-                    control={<Radio />}
-                    label='True'
-                  />
-                  <FormControlLabel
-                    value='false'
-                    control={<Radio />}
-                    label='False'
-                  />
-                </RadioGroup>
-              </FormControl>
-            ) : (
-              <TextField
-                margin='dense'
-                id={`correct-answer-${question.bet_id}`}
-                label='Correct Answer'
-                type='text'
-                fullWidth
-                variant='outlined'
-                value={correctAnswers[question.bet_id] || ''}
-                onChange={(e) =>
-                  handleAnswerChange(question.bet_id, e.target.value)
-                }
-              />
-            )}
-          </CardContent>
-        </Card>
-      </Paper>
-    );
-  };
-
   return (
-    <div>
-      <Box sx={{ marginTop: '100px' }}>
-        <Typography variant='h5'>Add Bets!</Typography>
-        <Chip
-          label='true or false'
-          color={newBetType === 'true_false' ? 'secondary' : 'default'}
-          onClick={() =>
-            setNewBetType('true_false')
-          }
-        />
-        <Chip
-          label='Player Input'
-          color={newBetType === 'player_input' ? 'secondary' : 'default'}
-          onClick={() =>
-            setNewBetType('player_input')
-          }
-        />
-      </Box>
-      <FormControl>
-        {newBetType !== null && (
-          <Box>
-            <TextField label='Question' onChange={updateNewBetPrompt} />
-            <TextField
-              label='Points'
-              type='number'
-              value={newBetPoints}
-              onChange={updateNewBetPoints}
-            />
-            <Button onClick={handleAddBet} variant='contained' color='primary'>
-              Add Bet
-            </Button>
-          </Box>
-        )}
-      </FormControl>
-      <Box>
-        {questions.map((question, i) => renderQuestion(question, i))}
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={handleSubmitCorrectAnswers}
-          sx={{ marginTop: 2 }}
-        >
-          Submit Correct Answers
-        </Button>
-      </Box>
+    <div style={{ marginTop: '100px' }}>
+      <Typography variant='h4' sx={{ width: '100%', textAlign: 'center' }}>
+        Event Name: {title}
+      </Typography>
+      {questions.map((q) => {
+        if (q.correct_answer) {
+          return (
+            <Paper key={q.bet_id} elevation={3} sx={cardStyle}>
+              <Card key={q.bet_id} sx={{ marginBottom: 2 }}>
+                <CardContent>
+                  <Typography variant='h6'>{q.question}</Typography>
+                  <Typography variant='h6'>
+                    Correct Answer: {q.correct_answer}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Paper>
+          );
+        } else {
+          return (
+            <Paper key={q.bet_id} elevation={3} sx={cardStyle}>
+              <Card key={q.bet_id} sx={{ marginBottom: 2 }}>
+                <CardContent>
+                  <Typography variant='h6'>{q.question}</Typography>
+                  {q.type === 'true_false' ? (
+                    <FormControl>
+                      <RadioGroup
+                        aria-label={q.question}
+                        value={correctAnswers[q.bet_id]}
+                        onChange={(e) => handleChange(e, q)}
+                      >
+                        <FormControlLabel
+                          value='true'
+                          control={<Radio />}
+                          label='True'
+                        />
+                        <FormControlLabel
+                          value='false'
+                          control={<Radio />}
+                          label='False'
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  ) : (
+                    <TextField
+                      margin='dense'
+                      id={`answer-${q.bet_id}`}
+                      label='Your Answer'
+                      type='text'
+                      fullWidth
+                      variant='outlined'
+                      value={correctAnswers[q.bet_id]}
+                      onChange={(e) => handleChange(e, q)}
+                    />
+                  )}
+                </CardContent>
+                <CardActions>
+                  <Button
+                    onClick={async () => {
+                      const updateAnswerRes = await fetch(
+                        `/event/update-correct-answer/${q.bet_id}`,
+                        {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({
+                            bet_id: q.bet_id,
+                            correct_answer: correctAnswers[q.bet_id],
+                          }),
+                        }
+                      );
+                      if (updateAnswerRes.ok) {
+                        setSnackbarMessage({
+                          severity: 'success',
+                          message: 'updated correct answer successfully',
+                        });
+                        const i = questions.findIndex(
+                          (item) => item.bet_id === q.bet_id
+                        );
+                        const updatedQuestions = [...questions];
+                        updatedQuestions[i] = {
+                          ...q,
+                          correct_answer: correctAnswers[q.bet_id],
+                        };
+                        setQuestions(updatedQuestions);
+                        const newLeaderboard = await updateAnswerRes.json();
+                        console.log('new leaderboard', newLeaderboard);
+                        const playerRanking = [];
+                        newLeaderboard.forEach(
+                          (user) => (user.score = Number(user.score))
+                        );
+                        newLeaderboard.sort((a, b) => a.score - b.score);
+                        newLeaderboard.forEach((user, i) =>
+                          playerRanking.push({
+                            user_id: user.user_id,
+                            place: i + 1,
+                          })
+                        );
+                        const updateRankingRes = await fetch(
+                          `/event/update-ranking/${event_id}`,
+                          {
+                            method: 'POST',
+                            headers: {
+                              'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ playerRanking }),
+                          }
+                        );
+                        if (!updateRankingRes.ok) {
+                          setSnackbarMessage({
+                            severity: 'error',
+                            message: 'updated players ranking failed',
+                          });
+                        }
+                      } else {
+                        setSnackbarMessage({
+                          severity: 'error',
+                          message: 'updated correct answer failed',
+                        });
+                      }
+                    }}
+                  >
+                    Update Correct Anser
+                  </Button>
+                </CardActions>
+              </Card>
+            </Paper>
+          );
+        }
+      })}
     </div>
   );
+
+  // const renderQuestion = (question, i) => {
+  //   return (
+  //     <Paper
+  //       key={i}
+  //       elevation={3}
+  //       sx={{
+  //         marginBottom: 2,
+  //         width: '60vw',
+  //         marginLeft: 'auto',
+  //         marginRight: 'auto',
+  //         marginTop: '100px',
+  //       }}
+  //     >
+  //       <Card>
+  //         <CardContent>
+  //           <Typography variant='h6'>{question.question}</Typography>
+  //           {question.type === 'true_false' ? (
+  //             <FormControl component='fieldset'>
+  //               <RadioGroup
+  //                 aria-label='Correct Answer'
+  //                 value={correctAnswers[question.bet_id] || ''}
+  //                 onChange={(e) =>
+  //                   handleAnswerChange(question.bet_id, e.target.value)
+  //                 }
+  //               >
+  //                 <FormControlLabel
+  //                   value='true'
+  //                   control={<Radio />}
+  //                   label='True'
+  //                 />
+  //                 <FormControlLabel
+  //                   value='false'
+  //                   control={<Radio />}
+  //                   label='False'
+  //                 />
+  //               </RadioGroup>
+  //             </FormControl>
+  //           ) : (
+  //             <TextField
+  //               margin='dense'
+  //               id={`correct-answer-${question.bet_id}`}
+  //               label='Correct Answer'
+  //               type='text'
+  //               fullWidth
+  //               variant='outlined'
+  //               value={correctAnswers[question.bet_id] || ''}
+  //               onChange={(e) =>
+  //                 handleAnswerChange(question.bet_id, e.target.value)
+  //               }
+  //             />
+  //           )}
+  //         </CardContent>
+  //       </Card>
+  //     </Paper>
+  //   );
+  // };
+
+  // return (
+  //   <div>
+  //     <Box sx={{ marginTop: '100px' }}>
+  //       <Typography variant='h5'>Add Bets!</Typography>
+  //       <Chip
+  //         label='true or false'
+  //         color={newBetType === 'true_false' ? 'secondary' : 'default'}
+  //         onClick={() => setNewBetType('true_false')}
+  //       />
+  //       <Chip
+  //         label='Player Input'
+  //         color={newBetType === 'player_input' ? 'secondary' : 'default'}
+  //         onClick={() => setNewBetType('player_input')}
+  //       />
+  //     </Box>
+  //     <FormControl>
+  //       {newBetType !== null && (
+  //         <Box>
+  //           <TextField label='Question' onChange={updateNewBetPrompt} />
+  //           <TextField
+  //             label='Points'
+  //             type='number'
+  //             value={newBetPoints}
+  //             onChange={updateNewBetPoints}
+  //           />
+  //           <Button onClick={handleAddBet} variant='contained' color='primary'>
+  //             Add Bet
+  //           </Button>
+  //         </Box>
+  //       )}
+  //     </FormControl>
+  //     <Box>
+  //       {questions.map((question, i) => renderQuestion(question, i))}
+  //       <Button
+  //         variant='contained'
+  //         color='primary'
+  //         onClick={handleSubmitCorrectAnswers}
+  //         sx={{ marginTop: 2 }}
+  //       >
+  //         Submit Correct Answers
+  //       </Button>
+  //     </Box>
+  //   </div>
+  // );
 }
