@@ -40,8 +40,8 @@ export default function AdminEvent({ event_id }) {
 
 
   useEffect(() => {
-    // fetch(`/get-questionnaire/${event_id}`)
-    fetch(`/event/get-questionnaire/6`)
+    fetch(`/get-questionnaire/${event_id}`)
+    // fetch(`/event/get-questionnaire/6`) // hard coded event_id
       .then(response => response.json())
       .then(data => {
         console.log('data in get questionnaire in addbets:', data);
@@ -69,8 +69,8 @@ export default function AdminEvent({ event_id }) {
   };
 
   const handleAddBet = async () => {
-    // const addBetRes = await fetch(`/event/new-bet/${event_id}`, {
-      const addBetRes = await fetch(`/event/new-bet/6`, {
+    const addBetRes = await fetch(`/event/new-bet/${event_id}`, {
+      // const addBetRes = await fetch(`/event/new-bet/6`, { // hard coded event_id
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
