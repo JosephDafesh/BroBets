@@ -14,7 +14,7 @@ import { useStore } from './store';
 
 export default function NavBar() {
   const navigate = useNavigate();
-  const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
+  // const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
   const setEvent_id = useStore((state) => state.setEvent_id);
   const setNickname = useStore((state) => state.setNickname);
 
@@ -106,10 +106,10 @@ export default function NavBar() {
             sx={{ ml: 'auto', minWidth: '100px' }}
             onClick={async () => {
               await fetch('/user/signout');
-              setSnackbarMessage({
-                severity: 'success',
-                message: 'Signed out successfully',
-              });
+              // setSnackbarMessage({
+              //   severity: 'success',
+              //   message: 'Signed out successfully',
+              // });
               navigate('/');
             }}
           >

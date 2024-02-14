@@ -22,6 +22,7 @@ export default function AdminEvent() {
   const [questions, setQuestions] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState({});
   const { event_id } = useStore.getState();
+  console.log('event_id in adminEvent is', event_id);
 
   //   const [questions, setQuestions] = useState([
   //     { bet_id: '1', question: 'Is React a library for frontend development?', type: 'true_false' },
