@@ -72,7 +72,7 @@ router.delete('/:event_id', eventController.deleteEvent, (req, res) => {
   res.status(200).send({ message: res.locals.message });
 });
 
-router.get('/answers/:event_id', (req, res) =>
+router.get('/answers/:event_id', eventController.getAnswers, (req, res) =>
   res.status(200).send(res.locals.answers)
 );
 
