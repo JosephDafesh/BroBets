@@ -31,9 +31,9 @@ const newEvent = (req, res, next) => {
       [event_title, last_call, false, user_id, 0, new Date().toISOString()]
     )
     .then((data) => {
-      console.log('newEvent rows:', data.rows)
+      console.log('newEvent rows:', data.rows);
       res.locals.newEvent_id = data.rows[0];
-      console.log('newEvent:', res.locals.newEvent)
+      console.log('newEvent:', res.locals.newEvent);
       return next();
     })
     .catch((err) =>

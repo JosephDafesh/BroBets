@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { useNavigate } from 'react-router-dom';
+import JoinGame from './joinGame';
 
 export default function NavBar() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function NavBar() {
 
   const handlePageClick = (pageStr) => {
     navigate(`/${pageStr}`);
-  }
+  };
 
   return (
     <AppBar
@@ -66,11 +67,32 @@ export default function NavBar() {
           >
             <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
               {/* Simplified Buttons without Typography and with a light blue color */}
-              <Button sx={{ color: 'black' }} onClick={() => handlePageClick('Dashboard')}> Dashboard </Button>
-              <Button sx={{ color: 'black' }} onClick={() => handlePageClick('Events')}>Events </Button>
-              <Button sx={{ color: 'black' }} onClick={() => handlePageClick('newEvent')}>Create Event </Button>
-              <Button sx={{ color: 'black' }} onClick={() => handlePageClick('Scoreboard')}>ScoreBoard </Button>
-              <Button sx={{ color: 'black' }} onClick={() => handlePageClick('EventAnswer')}>Something else </Button>
+              <Button
+                sx={{ color: 'black' }}
+                onClick={() => handlePageClick('Dashboard')}
+              >
+                {' '}
+                Dashboard{' '}
+              </Button>
+              <Button
+                sx={{ color: 'black' }}
+                onClick={() => handlePageClick('Events')}
+              >
+                Events{' '}
+              </Button>
+              <Button
+                sx={{ color: 'black' }}
+                onClick={() => handlePageClick('newEvent')}
+              >
+                Create Event{' '}
+              </Button>
+              <Button
+                sx={{ color: 'black' }}
+                onClick={() => handlePageClick('Scoreboard')}
+              >
+                ScoreBoard{' '}
+              </Button>
+              <JoinGame />
             </Box>
           </Box>
           <Button
