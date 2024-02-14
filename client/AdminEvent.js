@@ -112,7 +112,7 @@ export default function AdminEvent() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ event_id, correctAnswers }),
+      // body: JSON.stringify({ event_id, correctAnswers }),
       body: JSON.stringify({ event_id, correctAnswers }),
     })
       .then((response) => {

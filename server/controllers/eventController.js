@@ -334,6 +334,23 @@ const getAdminEvents = async (req, res, next) => {
   }
 };
 
+const deleteEvent = async (req, res, next) => {
+  const { event_id } = req.params;
+  try {
+    await db.query('DELETE FROM events WHERE event_id = $1;', [event_id]);
+    res.locals.message = 'Event deleted successfully';
+    return next();
+  } catch (e) {
+    console.error('Delete event error:', e);
+    return next({
+      log: 'Express Caught eventController.deleteEvent middleware error' + e,
+      message: {
+        err: 'An error occurred when deleting an event' + e,
+      },
+    });
+  }
+};
+
 module.exports = {
   getLeaderboard,
   newEvent,
@@ -347,4 +364,5 @@ module.exports = {
   getEventTitleAndCreator,
   checkDuplicateUserInEvent,
   getAdminEvents,
+  deleteEvent,
 };
