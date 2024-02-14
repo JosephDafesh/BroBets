@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormControl, Box, TextField, Button, Typography, Chip } from '@mui/material';
+import { FormControl, Box, TextField, Button, Typography } from '@mui/material';
 import { DatePicker, TimeField } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { useStore } from './store';
@@ -23,9 +23,6 @@ export default function NewEvent() {
   const [eventName, setEventName] = useState('');
   const [lastCallDate, setLastCallDate] = useState(null);
   const [lastCallTime, setLastCallTime] = useState(null);
-  const [newBetPrompt, setNewBetPrompt] = useState('');
-  const [newBetType, setNewBetType] = useState(null);
-  const [newBetPoints, setNewBetPoints] = useState(1);
 
   const updateEventName = (e) => {
     setEventName(e.target.value);
@@ -52,22 +49,12 @@ export default function NewEvent() {
     return timestampDateTime;
   };
 
-  const updateNewBetPrompt = (e) => {
-    setNewBetPrompt(e.target.value);
-    console.log('newBetPrompt:', e.target.value)
-  };
-
-  const updateNewBetPoints = (e) => {
-    setNewBetPoints(e.target.value);
-    console.log('newBetPoints:', e.target.value)
-  };
-
   // gotta pull user_id off of cookie first
   const handleAddEvent = async () => {
     // query db to insert new event
     const timestampDateTime = combineDateTime();
 
-    const addEventResponse = await fetch(`/event/new/:${user_id}`, {
+    const addEventResponse = await fetch(`/event/new/${user_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -80,20 +67,6 @@ export default function NewEvent() {
     const addEventData = await addEventResponse.json();
     setEvent_id(addEventData);
     console.log('addEventData:', addEventData);
-  };
-
-  const handleAddBet = () => {
-    fetch(`/event/new-bet/${event_id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        type: newBetType,
-        question: newBetPrompt,
-        points: newBetPoints
-      }),
-    });
   };
 
   return (
@@ -114,32 +87,6 @@ export default function NewEvent() {
                 Create Event
             </Button>
         </Box>
-        <Box>
-            <Typography variant="h5">
-                Add Bets!
-            </Typography>
-            <Chip label="Yes or No" 
-            onClick={() => setNewBetType('Yes or No')} />
-            <Chip label="Player Input" 
-            onClick={() => setNewBetType('Player Input')}/>
-        </Box>
-        {newBetType !== null && 
-            <Box>
-                <TextField label="Question" 
-                onChange={updateNewBetPrompt}
-                />
-                <TextField label="Points" 
-                type="number" 
-                value={newBetPoints} 
-                onChange={updateNewBetPoints}
-                />
-                <Button onClick={handleAddBet} 
-                variant="contained" 
-                color="success" >
-                    Add Bet
-                </Button>
-            </Box>
-        }
     </FormControl>
   );
 };

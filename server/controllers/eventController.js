@@ -51,12 +51,14 @@ const newBet = async (req, res, next) => {
   const { type, question, points } = req.body;
   try {
     // add a row of new bet to table
-    await db.query(
-      'INSERT INTO bets ' +
-        '(event_id, type, question, points) ' +
-        'VALUES($1, $2, $3, $4);',
+    const newBetData = await db.query(
+      `INSERT INTO bets 
+        (event_id, type, question, points)
+        VALUES($1, $2, $3, $4)
+        RETURNING *;`,
       [event_id, type, question, points]
     );
+    res.locals.newBet = newBetData.rows;
     // update total_points in events table
     await db.query(
       'UPDATE events SET total_points = total_points + $1 WHERE event_id = $2;',
@@ -186,7 +188,7 @@ const getQuestionnaire = async (req, res, next) => {
   const { event_id } = req.params;
   try {
     const betQueryRes = await db.query(
-      'SELECT type, question, points FROM bets WHERE event_id = $1;',
+      'SELECT type, question, points, bet_id FROM bets WHERE event_id = $1;',
       [event_id]
     );
     res.locals.questionnaire = betQueryRes.rows;
