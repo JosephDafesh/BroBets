@@ -52,7 +52,7 @@ export default function EventAnswer() {
         width: '100%', 
         paddingTop: '12vh'
       }}>
-       {renderComponent()}
+        {renderComponent()}
       </Box>
     </div>
   );

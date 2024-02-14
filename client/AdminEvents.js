@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Typography, Box, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete'; // Make sure to import DeleteIcon
 import { useStore } from './store';
+import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 export default function AdminEvents() {
   const { user_id } = useStore.getState();
@@ -85,7 +87,7 @@ export default function AdminEvents() {
                 event_id: {e.event_id}
               </Typography>
               <Typography color='textSecondary' gutterBottom>
-                {e.created_at}
+                {dayjs(e.last_call).format('MMMM D, YYYY h:mm A')}
               </Typography>
               <Typography variant='body2'>
                 Rank: {e.place}/{e.players_count}

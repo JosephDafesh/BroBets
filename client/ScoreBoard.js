@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-import Navbar from './Navbar';
 
 const userColumns = [
   { field: 'nickname', headerName: 'Nickname', width: 150 },
@@ -52,7 +51,6 @@ export default function ScoreBoard({ event_id }) {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4, mt: 12, height: 900, width: '100%' }}>
-      <Navbar />
       <DataGrid
         rows={userData}
         columns={userColumns}
