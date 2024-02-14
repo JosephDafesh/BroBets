@@ -5,19 +5,27 @@ import { useStore } from './store';
 
 export default function Dashboard() {
   const [events, setEvents] = useState([]);
-  const { user_id } = useStore.getState();
+  const setUser_id = useStore((state) => state.setUser_id);
   // const setEvents = useStore(state => state.setEvents);
   // const events = useStore(state => state.events);
 
   useEffect(() => {
     const fetchData = async () => {
-      const eventsRes = await fetch(`/event/events-for/${user_id}`, {
+      const userRes = await fetch('user/get', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
-      if (eventsRes.ok) {
-        const e = await eventsRes.json();
-        setEvents(e);
+      if (userRes.ok) {
+        const u = await userRes.json();
+        setUser_id(u.user_id);
+        const eventsRes = await fetch(`/event/events-for/${u.user_id}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        if (eventsRes.ok) {
+          const e = await eventsRes.json();
+          setEvents(e);
+        }
       }
     };
     fetchData();
