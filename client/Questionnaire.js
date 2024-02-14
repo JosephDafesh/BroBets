@@ -26,6 +26,7 @@ export default function Questionnaire() {
   console.log('questions are', questions);
   const navigate = useNavigate();
   const setEvent_id = useStore((state) => state.setEvent_id);
+  const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
 
   // Fetch the questions for the event
   useEffect(() => {
@@ -93,12 +94,20 @@ export default function Questionnaire() {
         if (!response.ok) {
           throw new Error('Failed to submit answers');
         }
-        alert('Answers submitted successfully');
+        setSnackbarMessage({
+          severity: 'success',
+          message: 'submitted your answers successfully',
+        });
         setEvent_id(null);
         setNickname('');
         navigate('/dashboard');
       })
-      .catch((error) => console.error('Error submitting answers:', error));
+      .catch((error) =>
+        setSnackbarMessage({
+          severity: 'error',
+          message: 'submitted your answers failed' + error,
+        })
+      );
   };
 
   const cardStyle = {

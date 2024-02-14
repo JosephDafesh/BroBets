@@ -33,7 +33,8 @@ const defaultTheme = createTheme();
 
 export default function SignIn({ onFormSwitch }) {
   const navigate = useNavigate();
-  const { setUser_id, setSnackbarMessage } = useStore.getState();
+  const setUser_id = useStore((state) => state.setUser_id);
+  const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
 
   useEffect(() => {
     const cookies = document.cookie.split('; ');
@@ -45,30 +46,26 @@ export default function SignIn({ onFormSwitch }) {
     });
   }, []);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    fetch('user/signin', {
+    const signinRes = await fetch('user/signin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: data.get('email'),
         password: data.get('password'),
       }),
-    })
-      .then(async (response) => {
-        const { message } = await response.json();
-        if (response.ok) {
-          setSnackbarMessage({ severity: 'success', message });
-          setTimeout(() => navigate('/dashboard'), 500);
-        } else {
-          setSnackbarMessage({ severity: 'error', message });
-        }
-      })
-      .catch((err) => {
-        console.log(err, 'error when logging in');
-      });
+    });
+    const { message } = await signinRes.json();
+    if (signinRes.ok) {
+      setSnackbarMessage({ severity: 'success', message });
+      setTimeout(() => navigate('/dashboard'), 500);
+    } else {
+      setSnackbarMessage({ severity: 'error', message });
+      setTimeout(() => navigate('/'), 500);
+    }
   };
 
   return (

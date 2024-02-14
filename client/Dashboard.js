@@ -6,6 +6,7 @@ import { useStore } from './store';
 export default function Dashboard() {
   const [events, setEvents] = useState([]);
   const setUser_id = useStore((state) => state.setUser_id);
+  const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
   // const setEvents = useStore(state => state.setEvents);
   // const events = useStore(state => state.events);
 
@@ -25,7 +26,17 @@ export default function Dashboard() {
         if (eventsRes.ok) {
           const e = await eventsRes.json();
           setEvents(e);
+        } else {
+          setSnackbarMessage({
+            severity: 'error',
+            message: 'fetching user events failed',
+          });
         }
+      } else {
+        setSnackbarMessage({
+          severity: 'error',
+          message: 'fetching user data failed',
+        });
       }
     };
     fetchData();

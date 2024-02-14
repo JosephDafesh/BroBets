@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Typography, Box } from '@mui/material';
 import { useStore } from './store';
-import { useNavigate } from 'react-router-dom';
 
 export default function AdminEvents() {
   const { user_id } = useStore.getState();
   const [adminEvents, setAdminEvents] = useState([]);
+  const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,6 +18,10 @@ export default function AdminEvents() {
         setAdminEvents(a);
       } else {
         console.log('Fetching admin events for user failed');
+        setSnackbarMessage({
+          severity: 'error',
+          message: 'Fetching admin events for user failed',
+        });
       }
     };
     fetchData();
