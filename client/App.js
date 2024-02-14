@@ -85,7 +85,7 @@ function App() {
                 path='/newevent'
                 element={event_id ? <CreateBets /> : <NewEvent />}
               />
-              <Route path='scoreboard/:event_id' element={<ScoreBoard />} />
+              <Route path='scoreboard/:event_id' element={<ScoreBoard event_id={event_id} />} />
               <Route path='/eventanswer' element={<EventAnswer />} />
               <Route path='/questionnaire' element={<Questionnaire />} />
               <Route

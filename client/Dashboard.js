@@ -8,6 +8,7 @@ export default function Dashboard() {
   const [events, setEvents] = useState([]);
   const setUser_id = useStore((state) => state.setUser_id);
   const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
+  const setEvent_id = useStore((state) => state.setEvent_id);
   const navigate = useNavigate(); 
 
   useEffect(() => {
@@ -43,6 +44,7 @@ export default function Dashboard() {
   }, [setUser_id]);
 
   const handleCardClick = (event_id) => {
+    setEvent_id(event_id);
     navigate(`/scoreboard/${event_id}`); 
   };
 
