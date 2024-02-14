@@ -60,6 +60,6 @@ module.exports = {
       directory: path.join(__dirname, 'build'),
     },
     proxy: { '/**': 'http://localhost:3000' }, //added this to do postman requests
-    port: 8081,
+    port: 8080,
   },
 };

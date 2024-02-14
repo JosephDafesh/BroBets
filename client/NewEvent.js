@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { FormControl, Box, TextField, Button, Typography, Chip } from '@mui/material';
 import { DatePicker, TimeField } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import { useStore } from './store';
 
 export default function NewEvent() {
+    const user_id = useStore((state) => state.user_id);
+    const setEvent_id = useStore((state) => state.setEvent_id);
   
     // need user to enter: name of event, last call time
 
@@ -23,7 +26,6 @@ export default function NewEvent() {
   const [newBetPrompt, setNewBetPrompt] = useState('');
   const [newBetType, setNewBetType] = useState(null);
   const [newBetPoints, setNewBetPoints] = useState(1);
-  const [event_id, setEvent_id] = useState(null);
 
   const updateEventName = (e) => {
     setEventName(e.target.value);

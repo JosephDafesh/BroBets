@@ -13,6 +13,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SignUp from './SignUp';
 import { useNavigate } from 'react-router-dom';
+import { useStore } from './store';
 
 function Copyright(props) {
   return (
@@ -33,11 +34,15 @@ const defaultTheme = createTheme();
 
 export default function SignIn({ onFormSwitch }) {
   const navigate = useNavigate();
+  const setUser_id = useStore((state) => state.setUser_id);
 
   useEffect(() => {
     const cookies = document.cookie.split('; ');
     cookies.forEach((cookie) => {
-      if (cookie.includes('user_id')) navigate('/dashboard');
+      if (cookie.includes('user_id')) {
+        setUser_id(cookie.split('=')[1]);
+        navigate('/dashboard');
+      }
     });
   }, []);
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "./Navbar";
+import EventAnswer from "./EventAnswer";
 import Dashboard from "./Dashboard";
 import SignIn from "./SignIn"
 import SignUp from "./SignUp"
@@ -23,25 +23,24 @@ function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Router>
-            <Routes>
-                <Route
-                path='/'
-                // element={<NewEvent />}
-                element={
-                    <>
-                    {currentForm === 'login' ? (
-                        <SignIn onFormSwitch={toggleForm} />
-                    ) : (
-                        <SignUp onFormSwitch={toggleForm} />
-                    )}
-                    </>
-                }
-                />
-                <Route path='/signin' element={<SignIn />} />
-                <Route path='/signup' element={<SignUp />} />
-                <Route path='/dashboard' element={<Dashboard />} />
-                <Route path='/newevent' element={<NewEvent />} />
-            </Routes>
+        <Routes>
+            <Route
+            path='/'
+            element={
+                <>
+                {currentForm === 'login' ? (
+                    <SignIn onFormSwitch={toggleForm} />
+                ) : (
+                    <SignUp onFormSwitch={toggleForm} />
+                )}
+                </>
+            }
+            />
+            <Route path='/signin' element={<SignIn />} />
+            <Route path='/signup' element={<SignUp />} />
+            <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/newevent' element={<NewEvent />} />
+        </Routes>
         </Router>
     </LocalizationProvider>
   );
