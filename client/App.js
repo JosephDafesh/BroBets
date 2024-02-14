@@ -41,6 +41,7 @@ function App() {
           <Route path='scoreboard' element={<ScoreBoard />} />
           <Route path='/eventanswer' element={<EventAnswer />} />
           <Route path='/questionnaire' element={<Questionnaire />} />
+          <Route path='/events' element={<AdminEvent />} />
         </Routes>
       </Router>
     </LocalizationProvider>
