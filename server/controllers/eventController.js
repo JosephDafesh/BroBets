@@ -31,9 +31,9 @@ const newEvent = (req, res, next) => {
       [event_title, last_call, false, user_id, 0, new Date().toISOString()]
     )
     .then((data) => {
-      console.log('newEvent rows:', data.rows)
+      console.log('newEvent rows:', data.rows);
       res.locals.newEvent_id = data.rows[0];
-      console.log('newEvent:', res.locals.newEvent)
+      console.log('newEvent:', res.locals.newEvent);
       return next();
     })
     .catch((err) =>
@@ -150,6 +150,38 @@ const updateRanking = async (req, res, next) => {
   }
 };
 
+const getEventTitleAndCreator = async (req, res, next) => {
+  const { event_id } = req.params;
+  try {
+    const eventQueryRes = await db.query(
+      'SELECT event_title, admin FROM events where event_id = $1;',
+      [event_id]
+    );
+    const { event_title, admin } = eventQueryRes.rows[0];
+    const userQueryRes = await db.query(
+      'SELECT first_name, last_name FROM users WHERE user_id = $1;',
+      [admin]
+    );
+    const { first_name, last_name } = userQueryRes.rows[0];
+    res.locals.eventTitleAndCreator = {
+      title: event_title,
+      creator: `${first_name} ${last_name}`,
+    };
+    return next();
+  } catch (e) {
+    return next({
+      log:
+        'Express Caught eventController.getEventTitleAndCreator middleware error' +
+        e,
+      message: {
+        err:
+          'An error occurred when getting the title and creator of an event' +
+          e,
+      },
+    });
+  }
+};
+
 const getQuestionnaire = async (req, res, next) => {
   const { event_id } = req.params;
   try {
@@ -256,4 +288,5 @@ module.exports = {
   updateRanking,
   postAnswers,
   getEventsForUser,
+  getEventTitleAndCreator,
 };
