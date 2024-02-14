@@ -4,14 +4,17 @@ import { makeStyles } from '@mui/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#ff8c00',
+      main: '#55917F',
     },
     secondary: {
-      main: '#ff8c00',
+      main: '#FFE2D1',
     },
     background: {
       default: '#E4FDE1', 
     }
+  },
+  typography: {
+    fontFamily: 'Barlow Condensed, sans-serif',
   },
 });
 

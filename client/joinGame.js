@@ -82,7 +82,7 @@ export default function JoinGame() {
             onChange={(e) => setNicknameInput(e.target.value)}
             size='small'
           />
-          <Button color='success' variant='contained' onClick={handleJoinGame}>
+          <Button color='primary' variant='contained' onClick={handleJoinGame}>
             Join
           </Button>
         </Stack>
