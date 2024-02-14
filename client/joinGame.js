@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import { useStore } from './store';
 import { useNavigate } from 'react-router-dom';
+import { Typography } from '@mui/material';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -65,7 +66,7 @@ export default function JoinGame() {
           noValidate
           autoComplete='off'
         >
-          <div align='center'>Enter Event Id</div>
+          <Typography align='center' >Enter Event Id</Typography>
           <TextField
             hiddenLabel
             value={eventIdInput}
@@ -73,7 +74,7 @@ export default function JoinGame() {
             size='small'
             onChange={(e) => setEventIdInput(e.target.value)}
           />
-          <div align='center'>Enter Nickname</div>
+          <Typography align='center'>Enter Nickname</Typography>
           <TextField
             hiddenLabel
             value={nicknameInput}

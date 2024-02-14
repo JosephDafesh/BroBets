@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
 import { useStore } from './store';
+import dayjs from 'dayjs';
 
 export default function Dashboard() {
   const [events, setEvents] = useState([]);
@@ -85,7 +86,7 @@ export default function Dashboard() {
                 {event.event_title}
               </Typography>
               <Typography color='textSecondary' gutterBottom>
-                {event.created_at}
+                {dayjs(event.last_call).format('MMMM D, YYYY h:mm A')}
               </Typography>
               <Typography variant='body2'>
                 Rank: {event.place}/{event.players_count}

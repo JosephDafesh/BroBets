@@ -56,10 +56,13 @@ export default function CreateBets() {
               {/* <Button>Delete</Button> */}
             </Stack>
           ))}
-          <Chip label='Yes or No' onClick={() => setNewBetType('true_false')} />
+          <Chip label='Yes or No' 
+            color={newBetType === 'true_false' ? 'primary' : 'default'}
+            onClick={() => setNewBetType('true_false')} />
           <Chip
             label='Player Input'
-            onClick={() => setNewBetType('Player Input')}
+            color={newBetType === 'player_input' ? 'primary' : 'default'}
+            onClick={() => setNewBetType('player_input')}
           />
         </Box>
         {newBetType !== null && (
