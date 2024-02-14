@@ -81,10 +81,11 @@ export default function AdminEvent({ event_id }) {
     const newBet = await addBetRes.json();
     console.log('newBetData:', newBet);
     setQuestions(prev => [...prev, newBet]);
+    console.log('questions:', questions);
   };
 
   const handleAnswerChange = (betId, answer) => {
-    setCorrectAnswers(prev => ({ ...prev, [betId]: answer }));
+  setCorrectAnswers(prev => ({ ...prev, [betId]: answer }));
   };
 
   const handleSubmitCorrectAnswers = () => {
@@ -112,12 +113,12 @@ export default function AdminEvent({ event_id }) {
             </Typography>
             <Chip label="true or false" 
             color={newBetType === 'true_false' ? 'primary' : 'default'} 
-            onClick={() => setNewBetType('true_false')} />
+            onClick={() => setNewBetType(newBetType === null ? 'true_false' : null)} />
             <Chip label="Player Input" 
             color={newBetType === 'player_input' ? 'primary' : 'default'} 
-            onClick={() => setNewBetType('player_input')}/>
+            onClick={() => setNewBetType(newBetType === null ? 'player_input' : null)}/>
         </Box>
-                  <FormControl>
+        <FormControl>
         {newBetType !== null && 
             <Box>
                 <TextField label="Question" 
@@ -169,7 +170,7 @@ export default function AdminEvent({ event_id }) {
           </Card>
         </Paper>
       ))}
-      <Button variant="contained" color="primary" onClick={handleSubmitCorrectAnswers} sx={{ marginTop: 2 }}>
+      <Button variant="contained" color="success" onClick={handleSubmitCorrectAnswers} sx={{ marginTop: 2 }}>
         Submit Correct Answers
       </Button>
     </Box>
