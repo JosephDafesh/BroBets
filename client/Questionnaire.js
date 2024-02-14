@@ -12,6 +12,7 @@ import {
   Paper,
 } from '@mui/material';
 import { useStore } from './store';
+import { useNavigate } from 'react-router-dom';
 
 export default function Questionnaire() {
   const initialNickname = useStore((state) => state.nickname);
@@ -23,6 +24,8 @@ export default function Questionnaire() {
   const [title, setTitle] = useState('');
   const [creator, setCreator] = useState('');
   console.log('questions are', questions);
+  const navigate = useNavigate();
+  const setEvent_id = useStore((state) => state.setEvent_id);
 
   // Fetch the questions for the event
   useEffect(() => {
@@ -91,6 +94,9 @@ export default function Questionnaire() {
           throw new Error('Failed to submit answers');
         }
         alert('Answers submitted successfully');
+        setEvent_id(null);
+        setNickname('');
+        navigate('/dashboard');
       })
       .catch((error) => console.error('Error submitting answers:', error));
   };

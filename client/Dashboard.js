@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
 import { useStore } from './store';

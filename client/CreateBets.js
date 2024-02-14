@@ -17,6 +17,7 @@ export default function CreateBets() {
   const [newBetPrompt, setNewBetPrompt] = useState('');
   const [newBetType, setNewBetType] = useState(null);
   const [newBetPoints, setNewBetPoints] = useState(1);
+  console.log('event_id');
   const navigate = useNavigate();
 
   const handleAddBet = async () => {

@@ -26,10 +26,10 @@ function App() {
   const snackbarMessage = useStore((state) => state.snackbarMessage);
 
   return (
-<<<<<<< HEAD
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Router>
+          {snackbarMessage && <Snackbar></Snackbar>}
           <NavBar />
           <Routes>
             <Route
@@ -62,34 +62,6 @@ function App() {
         </Router>
       </LocalizationProvider>
     </>
-=======
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Router>
-        <Routes>
-          <Route
-            path='/'
-            element={
-              <>
-                {currentForm === 'login' ? (
-                  <SignIn onFormSwitch={toggleForm} />
-                ) : (
-                  <SignUp onFormSwitch={toggleForm} />
-                )}
-              </>
-            }
-          />
-          <Route path='/signin' element={<SignIn />} />
-          <Route path='/signup' element={<SignUp />} />
-          <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/newevent' element={<NewEvent />} />
-          <Route path='scoreboard' element={<ScoreBoard />} />
-          <Route path='/eventanswer' element={<EventAnswer />} />
-          <Route path='/questionnaire' element={<Questionnaire />} />
-          <Route path='/events' element={<AdminEvent />} />
-        </Routes>
-      </Router>
-    </LocalizationProvider>
->>>>>>> dev
   );
 }
 

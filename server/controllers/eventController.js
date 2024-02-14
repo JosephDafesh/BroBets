@@ -189,7 +189,6 @@ const getQuestionnaire = async (req, res, next) => {
   try {
     const betQueryRes = await db.query(
       'SELECT type, question, points, bet_id FROM bets WHERE event_id = $1;',
-      'SELECT type, question, points, bet_id FROM bets WHERE event_id = $1;',
       [event_id]
     );
     res.locals.questionnaire = betQueryRes.rows;
