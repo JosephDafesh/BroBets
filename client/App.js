@@ -24,12 +24,11 @@ function App() {
 
   const event_id = useStore((state) => state.event_id);
   const snackbarMessage = useStore((state) => state.snackbarMessage);
-
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Router>
-          {snackbarMessage && <Snackbar></Snackbar>}
+          {/* {snackbarMessage && <Snackbar></Snackbar>} */}
           <NavBar />
           <Routes>
             <Route
