@@ -39,7 +39,7 @@ export default function Dashboard() {
         <Navbar />
       </div>
       <div id='dashboardContainers' align='center'>
-        <CreateGame align='center' />
+        {/* <CreateGame align='center' /> */}
       </div>
     </div>
   );

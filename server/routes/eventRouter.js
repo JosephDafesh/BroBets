@@ -14,7 +14,7 @@ router.post('/new/:user_id', eventController.newEvent, (req, res) =>
 );
 
 router.post('/new-bet/:event_id', eventController.newBet, (req, res) =>
-  res.status(200).send({ message: 'added a new bet to event successfully' })
+  res.status(200).send(res.locals.newBet)
 );
 
 router.post(
