@@ -71,26 +71,25 @@ export default function NavBar() {
                 sx={{ color: 'black' }}
                 onClick={() => handlePageClick('Dashboard')}
               >
-                {' '}
-                Dashboard{' '}
+                Dashboard
               </Button>
               <Button
                 sx={{ color: 'black' }}
                 onClick={() => handlePageClick('Events')}
               >
-                Events{' '}
+                Events
               </Button>
               <Button
                 sx={{ color: 'black' }}
                 onClick={() => handlePageClick('newEvent')}
               >
-                Create Event{' '}
+                Create Event
               </Button>
               <Button
                 sx={{ color: 'black' }}
                 onClick={() => handlePageClick('Scoreboard')}
               >
-                ScoreBoard{' '}
+                ScoreBoard
               </Button>
               <JoinGame />
             </Box>

@@ -55,4 +55,10 @@ router.get(
   (req, res) => res.status(200).send(res.locals.eventTitleAndCreator)
 );
 
+router.get(
+  '/join-game/:user_id/:event_id',
+  eventController.checkDuplicateUserInEvent,
+  (req, res) => res.status(200).send({ message: 'User can join the game' })
+);
+
 module.exports = router;
