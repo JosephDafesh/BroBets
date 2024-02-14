@@ -113,7 +113,6 @@ export default function AdminEvent() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ event_id, correctAnswers }),
-      body: JSON.stringify({ event_id, correctAnswers }),
     })
       .then((response) => {
         if (!response.ok) {
