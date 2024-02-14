@@ -23,6 +23,7 @@ function App() {
   };
 
   const event_id = useStore((state) => state.event_id);
+  const snackbarMessage = useStore((state) => state.snackbarMessage);
 
   return (
     <>
