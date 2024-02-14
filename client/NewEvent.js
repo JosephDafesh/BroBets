@@ -23,6 +23,7 @@ export default function NewEvent() {
   const [eventName, setEventName] = useState('');
   const [lastCallDate, setLastCallDate] = useState(null);
   const [lastCallTime, setLastCallTime] = useState(null);
+  const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
 
   const updateEventName = (e) => setEventName(e.target.value);
 
@@ -62,6 +63,15 @@ export default function NewEvent() {
     if (addEventResponse.ok) {
       const { event_id } = await addEventResponse.json();
       setEvent_id(event_id);
+      setSnackbarMessage({
+        severity: 'success',
+        message: 'created new event successfully',
+      });
+    } else {
+      setSnackbarMessage({
+        severity: 'error',
+        message: 'created new event failed',
+      });
     }
   };
 

@@ -17,8 +17,8 @@ export default function CreateBets() {
   const [newBetPrompt, setNewBetPrompt] = useState('');
   const [newBetType, setNewBetType] = useState(null);
   const [newBetPoints, setNewBetPoints] = useState(1);
-  console.log('event_id');
   const navigate = useNavigate();
+  const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
 
   const handleAddBet = async () => {
     const newBet = {
@@ -36,6 +36,15 @@ export default function CreateBets() {
     if (addBetRes.ok) {
       const b = await addBetRes.json();
       setBets([...bets, b]);
+      setSnackbarMessage({
+        severity: 'success',
+        message: 'added new bet successfully',
+      });
+    } else {
+      setSnackbarMessage({
+        severity: 'error',
+        message: 'added new bet failed',
+      });
     }
   };
 

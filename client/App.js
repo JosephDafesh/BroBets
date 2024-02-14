@@ -14,6 +14,8 @@ import { useStore } from './store';
 import NavBar from './Navbar';
 import AdminEvents from './AdminEvents';
 import CreateBets from './CreateBets';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 function App() {
   const [currentForm, setCurrentForm] = useState('login');
@@ -24,11 +26,24 @@ function App() {
 
   const event_id = useStore((state) => state.event_id);
   const snackbarMessage = useStore((state) => state.snackbarMessage);
+  console.log('snackbarMessage is', snackbarMessage);
+  const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Router>
-          {/* {snackbarMessage && <Snackbar></Snackbar>} */}
+          <Snackbar
+            open={Boolean(snackbarMessage)}
+            autoHideDuration={6000}
+            onClose={() => setSnackbarMessage(null)}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          >
+            {snackbarMessage && (
+              <Alert severity={snackbarMessage.severity}>
+                {snackbarMessage.message}
+              </Alert>
+            )}
+          </Snackbar>
           <NavBar />
           <Routes>
             <Route

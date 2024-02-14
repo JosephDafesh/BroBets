@@ -14,5 +14,8 @@ export const useStore = create((set, get) => ({
   setNickname: (nickname) => set({ nickname }),
 
   snackbarMessage: null,
-  setSnackbarMessage: (snackbarMessage) => set({ snackbarMessage }),
+  setSnackbarMessage: (snackbarMessage) => {
+    set({ snackbarMessage });
+    setTimeout(() => set({ snackbarMessage: null }), 1000);
+  },
 }));
