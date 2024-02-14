@@ -1,8 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
 
 export default function Dashboard() {
+
+  const [user, setUser] = useState(null);
+  // const [events, setEvents] = useState([]);
+  // const setEvents = useStore(state => state.setEvents);
+  // const events = useStore(state => state.events);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const userRes = await fetch('user/get', {
+  //       method: 'GET',
+  //       headers: { 'Content-Type': 'application/json' },
+  //     });
+  //     if (userRes.ok) {
+  //       const u = await userRes.json();
+  //       setUser(u);
+  //       const eventsRes = await fetch(`/event/events-for/${u.user_id}`, {
+  //         method: 'GET',
+  //         headers: { 'Content-Type': 'application/json' },
+  //       });
+  //       if (eventsRes.ok) {
+  //         const e = await eventsRes.json();
+  //         setEvents(e);
+  //       }
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
   const [events, setEvents] = useState([
     {
       id: 1,
