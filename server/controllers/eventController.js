@@ -188,7 +188,7 @@ const getQuestionnaire = async (req, res, next) => {
   const { event_id } = req.params;
   try {
     const betQueryRes = await db.query(
-      'SELECT type, question, points FROM bets WHERE event_id = $1;',
+      'SELECT type, question, points, bet_id FROM bets WHERE event_id = $1;',
       [event_id]
     );
     res.locals.questionnaire = betQueryRes.rows;
@@ -280,6 +280,32 @@ const getEventsForUser = async (req, res, next) => {
   }
 };
 
+const checkDuplicateUserInEvent = async (req, res, next) => {
+  const { user_id, event_id } = req.params;
+  try {
+    const scoreQueryRes = await db.query(
+      'SELECT * FROM scores WHERE user_id = $1 AND event_id = $2;',
+      [user_id, event_id]
+    );
+    if (scoreQueryRes.rows.length > 0)
+      return res
+        .status(400)
+        .send({ message: 'You have already joined the event.' });
+    return next();
+  } catch (e) {
+    return next({
+      log:
+        'Express Caught eventController.checkDuplicateUserInEvent middleware error' +
+        e,
+      message: {
+        err:
+          'An error occurred when checking if a user has participated in an event' +
+          e,
+      },
+    });
+  }
+};
+
 module.exports = {
   getLeaderboard,
   newEvent,
@@ -291,4 +317,5 @@ module.exports = {
   postAnswers,
   getEventsForUser,
   getEventTitleAndCreator,
+  checkDuplicateUserInEvent,
 };

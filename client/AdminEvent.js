@@ -7,7 +7,6 @@ export default function AdminEvent({ event_id }) {
   const [newBetPoints, setNewBetPoints] = useState(1);
   const [questions, setQuestions] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState({});
-  const [callForQuestionsNow, setCallForQuestionsNow] = useState(false);
 
 //   const [questions, setQuestions] = useState([
 //     { bet_id: '1', question: 'Is React a library for frontend development?', type: 'true_false' },
@@ -41,15 +40,19 @@ export default function AdminEvent({ event_id }) {
 
 
   useEffect(() => {
-    fetch(`/get-questionnaire/${event_id}`)
+    // fetch(`/get-questionnaire/${event_id}`)
+    fetch(`/event/get-questionnaire/6`)
       .then(response => response.json())
       .then(data => {
-        setQuestions(data.questionnaire);
+        console.log('data in get questionnaire in addbets:', data);
+        setQuestions(data);
         let initialCorrectAnswers = {};
-        data.questionnaire.forEach(question => {
-          // what are we doing here
-          initialCorrectAnswers[question.bet_id] = '';
-        });
+        if(data.length){
+          data.forEach(question => {
+            // what are we doing here
+            initialCorrectAnswers[question.bet_id] = '';
+          });
+        }
         setCorrectAnswers(initialCorrectAnswers);
       })
       .catch(error => console.error("Couldn't fetch questions:", error));
@@ -80,12 +83,12 @@ export default function AdminEvent({ event_id }) {
     })
     const newBet = await addBetRes.json();
     console.log('newBetData:', newBet);
-    setQuestions(prev => [...prev, newBet]);
+    setQuestions(prev => [...prev, ...newBet]);
     console.log('questions:', questions);
   };
 
   const handleAnswerChange = (betId, answer) => {
-  setCorrectAnswers(prev => ({ ...prev, [betId]: answer }));
+    setCorrectAnswers(prev => ({ ...prev, [betId]: answer }));
   };
 
   const handleSubmitCorrectAnswers = () => {
@@ -104,6 +107,40 @@ export default function AdminEvent({ event_id }) {
     })
     .catch(error => console.error('Error submitting correct answers:', error));
   };
+
+    const renderQuestion = (question, i) => {
+      return (
+        <Paper key={i} elevation={3} sx={{ marginBottom: 2, width: '60vw', marginLeft: 'auto', marginRight: 'auto' }}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6">{question.question}</Typography>
+              {question.type === 'true_false' ? (
+                <FormControl component="fieldset">
+                  <RadioGroup
+                    aria-label="Correct Answer"
+                    value={correctAnswers[question.bet_id] || ''}
+                    onChange={(e) => handleAnswerChange(question.bet_id, e.target.value)}
+                  >
+                    <FormControlLabel value="true" control={<Radio />} label="True" />
+                    <FormControlLabel value="false" control={<Radio />} label="False" />
+                  </RadioGroup>
+                </FormControl>
+              ) : (
+                <TextField
+                  margin="dense"
+                  id={`correct-answer-${question.bet_id}`}
+                  label="Correct Answer"
+                  type="text"
+                  fullWidth
+                  variant="outlined"
+                  value={correctAnswers[question.bet_id] || ''}
+                  onChange={(e) => handleAnswerChange(question.bet_id, e.target.value)}
+                />
+              )}
+            </CardContent>
+          </Card>
+        </Paper>
+      )};
 
   return (
     <div>
@@ -125,7 +162,7 @@ export default function AdminEvent({ event_id }) {
                 onChange={updateNewBetPrompt}
                 />
                 <TextField label="Points" 
-                type="number" 
+                type="number"
                 value={newBetPoints} 
                 onChange={updateNewBetPoints}
                 />
@@ -138,42 +175,11 @@ export default function AdminEvent({ event_id }) {
       }
       </FormControl>
     <Box>
-      {questions.map((question, i) => (
-        <Paper key={i} elevation={3} sx={{ marginBottom: 2, width: '60vw', marginLeft: 'auto', marginRight: 'auto' }}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6">{question.question}</Typography>
-              {question.type === 'true_false' ? (
-                <FormControl component="fieldset">
-                  <RadioGroup
-                    aria-label="Correct Answer"
-                    value={correctAnswers[question.bet_id]}
-                    onChange={(e) => handleAnswerChange(question.bet_id, e.target.value)}
-                  >
-                    <FormControlLabel value="true" control={<Radio />} label="True" />
-                    <FormControlLabel value="false" control={<Radio />} label="False" />
-                  </RadioGroup>
-                </FormControl>
-              ) : (
-                <TextField
-                  margin="dense"
-                  id={`correct-answer-${question.bet_id}`}
-                  label="Correct Answer"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  value={correctAnswers[question.bet_id]}
-                  onChange={(e) => handleAnswerChange(question.bet_id, e.target.value)}
-                />
-              )}
-            </CardContent>
-          </Card>
-        </Paper>
-      ))}
+      {questions.map((question, i) => renderQuestion(question, i))}
       <Button variant="contained" color="success" onClick={handleSubmitCorrectAnswers} sx={{ marginTop: 2 }}>
         Submit Correct Answers
       </Button>
     </Box>
     </div>
   );
-}
+};
