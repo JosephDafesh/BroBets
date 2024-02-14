@@ -25,13 +25,19 @@ export default function JoinGame() {
   const [eventIdInput, setEventIdInput] = useState('');
   const navigate = useNavigate();
 
+  const { user_id } = useStore.getState();
   const setEvent_id = useStore((state) => state.setEvent_id);
   const setNickname = useStore((state) => state.setNickname);
 
-  function handleJoinGame() {
-    setEvent_id(eventIdInput);
-    setNickname(nicknameInput);
-    navigate('/questionnaire');
+  async function handleJoinGame() {
+    const response = await fetch(`/event/join-game/${user_id}/${eventIdInput}`);
+    if (response.ok) {
+      setEvent_id(eventIdInput);
+      setNickname(nicknameInput);
+      navigate('/questionnaire');
+    } else {
+      console.log('cannot join game');
+    }
   }
   return (
     <>
