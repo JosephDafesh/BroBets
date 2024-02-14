@@ -10,6 +10,7 @@ import {
     Route,
   } from "react-router-dom";
 import ScoreBoard from './ScoreBoard';
+import AdminEvent from "./AdminEvent";
 
   
 
@@ -24,7 +25,7 @@ function App() {
     <Router>
       <Routes>
         <Route
-          path='/eve'
+          path='/'
           element={
             <>
               {currentForm === 'login' ? (
@@ -40,6 +41,7 @@ function App() {
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/event' element={<EventAnswer />} />
         <Route path='/scoreboard' element={<ScoreBoard />} />
+        <Route path='/newevent' element={<NewEvent />} />
       </Routes>
     </Router>
   );

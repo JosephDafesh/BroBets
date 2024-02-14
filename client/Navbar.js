@@ -14,7 +14,11 @@ export default function NavBar() {
   const navigate = useNavigate();
 
   const handleHomeClick = () => {
-    navigate('/');
+    navigate('/dashboard');
+  };
+
+  const handleEventsClick = () => {
+    navigate('/event');
   };
 
   const handleScoreBoardClick = () => {
@@ -65,9 +69,8 @@ export default function NavBar() {
             }}
           >
             <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-              {/* Simplified Buttons without Typography and with a light blue color */}
-              <Button sx={{ color: 'black' }}> Dashboard </Button>
-              <Button sx={{ color: 'black' }}>Events </Button>
+              <Button sx={{ color: 'black' }} onClick={handleHomeClick}> Dashboard </Button>
+              <Button sx={{ color: 'black' }} onClick={handleEventsClick} >Events </Button>
               <Button sx={{ color: 'black' }}>Create Event </Button>
               <Button sx={{ color: 'black' }} onClick={handleScoreBoardClick}>ScoreBoard </Button>
               <Button sx={{ color: 'black' }}>Something else </Button>
