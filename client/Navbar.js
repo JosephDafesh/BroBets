@@ -10,15 +10,21 @@ import IconButton from '@mui/material/IconButton';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import { useNavigate } from 'react-router-dom';
 import JoinGame from './joinGame';
+import { useStore } from './store';
 
 export default function NavBar() {
   const navigate = useNavigate();
+  const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
+  const setEvent_id = useStore((state) => state.setEvent_id);
+  const setNickname = useStore((state) => state.setNickname);
 
   const handleHomeClick = () => {
     navigate('/dashboard');
   };
 
   const handlePageClick = (pageStr) => {
+    setEvent_id(null);
+    setNickname('');
     navigate(`/${pageStr}`);
   };
 
@@ -100,6 +106,10 @@ export default function NavBar() {
             sx={{ ml: 'auto', minWidth: '100px' }}
             onClick={async () => {
               await fetch('/user/signout');
+              setSnackbarMessage({
+                severity: 'success',
+                message: 'Signed out successfully',
+              });
               navigate('/');
             }}
           >

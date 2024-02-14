@@ -61,4 +61,10 @@ router.get(
   (req, res) => res.status(200).send({ message: 'User can join the game' })
 );
 
+router.get(
+  '/admin-events/:user_id',
+  eventController.getAdminEvents,
+  (req, res) => res.status(200).send(res.locals.adminEvents)
+);
+
 module.exports = router;
