@@ -25,17 +25,17 @@ export default function ScoreBoard({ event_id }) {
   const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/leaderboard/${event_id}`)
+    fetch(`update-ranking/${event_id}`)
       .then(response => response.json())
       .then(data => {
         setUserData(data.map(({ user_id, ...remainingData }) => remainingData));
       })
       .catch(error => console.log('Error fetching user data:', error));
 
-    fetch(`/api/leaderboard/${event_id}/all-answers`)
+    fetch(`/api/leaderboard/${event_id}/`)
       .then(response => response.json())
       .then(data => {
-        setAllUserAnswersData(data.map(({ question_id, ...remainingData }) => remainingData)); 
+        setAllUserAnswersData(data.map(({ bet_id, ...remainingData }) => remainingData)); 
       })
       .catch(error => console.log('Error fetching all user answers:', error));
 

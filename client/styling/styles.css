@@ -13,4 +13,5 @@
 #dashboardContainers {
   display: flex;
   flex-direction: column-reverse;
+  background-color:rgb(8, 15, 13)
 }
