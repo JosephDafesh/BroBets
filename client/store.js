@@ -12,4 +12,7 @@ export const useStore = create((set, get) => ({
 
   nickname: null,
   setNickname: (nickname) => set({ nickname }),
+
+  snackbarMessage: null,
+  setSnackbarMessage: (snackbarMessage) => set({ snackbarMessage }),
 }));

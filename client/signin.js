@@ -33,7 +33,7 @@ const defaultTheme = createTheme();
 
 export default function SignIn({ onFormSwitch }) {
   const navigate = useNavigate();
-  const setUser_id = useStore((state) => state.setUser_id);
+  const { setUser_id, setSnackbarMessage } = useStore.getState();
 
   useEffect(() => {
     const cookies = document.cookie.split('; ');
@@ -58,11 +58,12 @@ export default function SignIn({ onFormSwitch }) {
       }),
     })
       .then(async (response) => {
+        const { message } = await response.json();
         if (response.ok) {
-          navigate('/dashboard');
+          setSnackbarMessage({ severity: 'success', message });
+          setTimeout(() => navigate('/dashboard'), 500);
         } else {
-          const { message } = await response.json();
-          console.log(message);
+          setSnackbarMessage({ severity: 'error', message });
         }
       })
       .catch((err) => {
