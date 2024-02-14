@@ -29,6 +29,7 @@ export default function JoinGame() {
   const { user_id } = useStore.getState();
   const setEvent_id = useStore((state) => state.setEvent_id);
   const setNickname = useStore((state) => state.setNickname);
+  const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
 
   async function handleJoinGame() {
     const response = await fetch(`/event/join-game/${user_id}/${eventIdInput}`);
@@ -36,8 +37,15 @@ export default function JoinGame() {
       setEvent_id(eventIdInput);
       setNickname(nicknameInput);
       navigate('/questionnaire');
+      setSnackbarMessage({
+        severity: 'success',
+        message: 'Joined game successfully',
+      });
     } else {
-      console.log('cannot join game');
+      setSnackbarMessage({
+        severity: 'error',
+        message: 'You have already joined the game',
+      });
     }
   }
   return (

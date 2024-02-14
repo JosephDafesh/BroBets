@@ -18,6 +18,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import theme from './styling/theme';
 import { makeStyles } from '@mui/styles';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 function App() {
 
@@ -42,13 +44,26 @@ function App() {
   const event_id = useStore((state) => state.event_id);
   const snackbarMessage = useStore((state) => state.snackbarMessage);
 
+  console.log('snackbarMessage is', snackbarMessage);
+  const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
   return (
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Router>
-            {/* {snackbarMessage && <Snackbar></Snackbar>} */}
+            <Snackbar
+              open={Boolean(snackbarMessage)}
+              autoHideDuration={6000}
+              onClose={() => setSnackbarMessage(null)}
+              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+              {snackbarMessage && (
+                <Alert severity={snackbarMessage.severity}>
+                  {snackbarMessage.message}
+                </Alert>
+              )}
+            </Snackbar>
             <NavBar />
             <Routes>
               <Route

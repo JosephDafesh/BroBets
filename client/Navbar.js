@@ -14,11 +14,10 @@ import { useStore } from './store';
 
 export default function NavBar() {
   const navigate = useNavigate();
-  // const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
   const setEvent_id = useStore((state) => state.setEvent_id);
   const setNickname = useStore((state) => state.setNickname);
   const location = useLocation();
-  console.log('location', location);
+  const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
   const handleHomeClick = () => {
     navigate('/dashboard');
   };
@@ -108,10 +107,10 @@ export default function NavBar() {
               sx={{ ml: 'auto', minWidth: '100px' }}
               onClick={async () => {
                 await fetch('/user/signout');
-                // setSnackbarMessage({
-                //   severity: 'success',
-                //   message: 'Signed out successfully',
-                // });
+                setSnackbarMessage({
+                  severity: 'success',
+                  message: 'Signed out successfully',
+                });
                 navigate('/');
               }}
             >

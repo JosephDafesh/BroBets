@@ -22,7 +22,7 @@ export default function AdminEvent() {
   const [questions, setQuestions] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState({});
   const { event_id } = useStore.getState();
-  console.log('event_id in adminEvent is', event_id);
+  const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
 
   //   const [questions, setQuestions] = useState([
   //     { bet_id: '1', question: 'Is React a library for frontend development?', type: 'true_false' },
@@ -70,7 +70,12 @@ export default function AdminEvent() {
         }
         setCorrectAnswers(initialCorrectAnswers);
       })
-      .catch((error) => console.error("Couldn't fetch questions:", error));
+      .catch((error) =>
+        setSnackbarMessage({
+          severity: 'error',
+          message: 'Getting questionnaire failed: ' + error,
+        })
+      );
   }, [event_id]);
 
   const updateNewBetPrompt = (e) => {
@@ -96,10 +101,19 @@ export default function AdminEvent() {
         points: newBetPoints,
       }),
     });
-    const newBet = await addBetRes.json();
-    console.log('newBetData:', newBet);
-    setQuestions((prev) => [...prev, ...newBet]);
-    console.log('questions:', questions);
+    if (addBetRes.ok) {
+      const newBet = await addBetRes.json();
+      setQuestions((prev) => [...prev, ...newBet]);
+      setSnackbarMessage({
+        severity: 'success',
+        message: 'added bet successfully',
+      });
+    } else {
+      setSnackbarMessage({
+        severity: 'error',
+        message: 'Adding bet failed',
+      });
+    }
   };
 
   const handleAnswerChange = (betId, answer) => {
@@ -121,7 +135,11 @@ export default function AdminEvent() {
         alert('Correct answers submitted successfully');
       })
       .catch((error) =>
-        console.error('Error submitting correct answers:', error)
+        setSnackbarMessage({
+          severity: 'error',
+          message: 'Error submitting correct answers:',
+          error,
+        })
       );
   };
 
