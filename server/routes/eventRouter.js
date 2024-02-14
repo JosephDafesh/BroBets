@@ -14,7 +14,7 @@ router.post('/new/:user_id', eventController.newEvent, (req, res) =>
 );
 
 router.post('/new-bet/:event_id', eventController.newBet, (req, res) =>
-  res.status(200).send({ message: 'added a new bet to event successfully' })
+  res.status(200).json(res.locals.newBet)
 );
 
 router.post(
@@ -36,7 +36,7 @@ router.post(
 router.get(
   '/get-questionnaire/:event_id',
   eventController.getQuestionnaire,
-  (req, res) => res.status(200).send(res.locals.questionnaire)
+  (req, res) => res.status(200).json(res.locals.questionnaire)
 );
 
 router.post('/post-answers', eventController.postAnswers, (req, res) =>
@@ -59,6 +59,12 @@ router.get(
   '/join-game/:user_id/:event_id',
   eventController.checkDuplicateUserInEvent,
   (req, res) => res.status(200).send({ message: 'User can join the game' })
+);
+
+router.get(
+  '/admin-events/:user_id',
+  eventController.getAdminEvents,
+  (req, res) => res.status(200).send(res.locals.adminEvents)
 );
 
 module.exports = router;

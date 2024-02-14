@@ -15,12 +15,16 @@ import { useStore } from './store';
 export default function NavBar() {
   const navigate = useNavigate();
   const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
+  const setEvent_id = useStore((state) => state.setEvent_id);
+  const setNickname = useStore((state) => state.setNickname);
 
   const handleHomeClick = () => {
     navigate('/dashboard');
   };
 
   const handlePageClick = (pageStr) => {
+    setEvent_id(null);
+    setNickname('');
     navigate(`/${pageStr}`);
   };
 

@@ -10,7 +10,7 @@ export const useStore = create((set, get) => ({
   events: [],
   setEvents: (events) => set({ events }),
 
-  nickname: null,
+  nickname: '',
   setNickname: (nickname) => set({ nickname }),
 
   snackbarMessage: null,

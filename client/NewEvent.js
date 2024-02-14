@@ -1,47 +1,39 @@
 import React, { useState } from 'react';
-import { FormControl, Box, TextField, Button, Typography, Chip } from '@mui/material';
+import { FormControl, Box, TextField, Button, Typography } from '@mui/material';
 import { DatePicker, TimeField } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { useStore } from './store';
 
 export default function NewEvent() {
-    const user_id = useStore((state) => state.user_id);
-    const setEvent_id = useStore((state) => state.setEvent_id);
-  
-    // need user to enter: name of event, last call time
+  const user_id = useStore((state) => state.user_id);
+  const setEvent_id = useStore((state) => state.setEvent_id);
 
-    // and then create bets
-        // types: binary, multiple choice, input
-    // add bet
-        // select type
-        // enter question
-        // enter options
-    // reorder bets?
-    // button for create event at the bottom
-    // present user with id of event to share with friends
+  // need user to enter: name of event, last call time
+
+  // and then create bets
+  // types: binary, multiple choice, input
+  // add bet
+  // select type
+  // enter question
+  // enter options
+  // reorder bets?
+  // button for create event at the bottom
+  // present user with id of event to share with friends
 
   const [eventName, setEventName] = useState('');
   const [lastCallDate, setLastCallDate] = useState(null);
   const [lastCallTime, setLastCallTime] = useState(null);
-  const [newBetPrompt, setNewBetPrompt] = useState('');
-  const [newBetType, setNewBetType] = useState(null);
-  const [newBetPoints, setNewBetPoints] = useState(1);
 
-  const updateEventName = (e) => {
-    setEventName(e.target.value);
-    console.log('eventName:', e.target.value)
-  };
+  const updateEventName = (e) => setEventName(e.target.value);
 
   const updateLastCallDate = (newTimestamp) => {
     newTimestamp = dayjs(newTimestamp).format('YYYY-MM-DD');
     setLastCallDate(newTimestamp);
-    console.log('lastCallDate:', newTimestamp);
   };
 
   const updateLastCallTime = (newTimestamp) => {
     newTimestamp = dayjs(newTimestamp).format('HH:mm');
     setLastCallTime(newTimestamp);
-    console.log('lastCallTime:', newTimestamp);
   };
 
   const combineDateTime = () => {
@@ -52,22 +44,12 @@ export default function NewEvent() {
     return timestampDateTime;
   };
 
-  const updateNewBetPrompt = (e) => {
-    setNewBetPrompt(e.target.value);
-    console.log('newBetPrompt:', e.target.value)
-  };
-
-  const updateNewBetPoints = (e) => {
-    setNewBetPoints(e.target.value);
-    console.log('newBetPoints:', e.target.value)
-  };
-
   // gotta pull user_id off of cookie first
   const handleAddEvent = async () => {
     // query db to insert new event
     const timestampDateTime = combineDateTime();
 
-    const addEventResponse = await fetch(`/event/new/:${user_id}`, {
+    const addEventResponse = await fetch(`/event/new/${user_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -77,70 +59,23 @@ export default function NewEvent() {
         last_call: timestampDateTime,
       }),
     });
-    const addEventData = await addEventResponse.json();
-    setEvent_id(addEventData);
-    console.log('addEventData:', addEventData);
-  };
-
-  const handleAddBet = () => {
-    fetch(`/event/new-bet/${event_id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        type: newBetType,
-        question: newBetPrompt,
-        points: newBetPoints
-      }),
-    });
+    if (addEventResponse.ok) {
+      const { event_id } = await addEventResponse.json();
+      setEvent_id(event_id);
+    }
   };
 
   return (
     <FormControl>
-        <Box>
-            <Typography variant="h4">
-                Create a New Event!
-            </Typography>
-            <TextField label="Event Name" 
-            onChange={updateEventName}/>
-            <DatePicker label="Last call date" 
-            onChange={updateLastCallDate}/>
-            <TimeField label="Last call time" 
-            onChange={updateLastCallTime} />
-            <Button onClick={handleAddEvent} 
-            variant="contained" 
-            color="success" >
-                Create Event
-            </Button>
-        </Box>
-        <Box>
-            <Typography variant="h5">
-                Add Bets!
-            </Typography>
-            <Chip label="Yes or No" 
-            onClick={() => setNewBetType('Yes or No')} />
-            <Chip label="Player Input" 
-            onClick={() => setNewBetType('Player Input')}/>
-        </Box>
-        {newBetType !== null && 
-            <Box>
-                <TextField label="Question" 
-                onChange={updateNewBetPrompt}
-                />
-                <TextField label="Points" 
-                type="number" 
-                value={newBetPoints} 
-                onChange={updateNewBetPoints}
-                />
-                <Button onClick={handleAddBet} 
-                variant="contained" 
-                color="success" >
-                    Add Bet
-                </Button>
-            </Box>
-        }
+      <Box sx={{ marginTop: '100px' }}>
+        <Typography variant='h4'>Create a New Event!</Typography>
+        <TextField label='Event Name' onChange={updateEventName} />
+        <DatePicker label='Last call date' onChange={updateLastCallDate} />
+        <TimeField label='Last call time' onChange={updateLastCallTime} />
+        <Button onClick={handleAddEvent} variant='contained' color='success'>
+          Create Event
+        </Button>
+      </Box>
     </FormControl>
   );
-};
-
+}

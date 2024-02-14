@@ -22,6 +22,7 @@ export default function Questionnaire() {
   const [nickname, setNickname] = useState(initialNickname); // State to hold the nickname
   const [title, setTitle] = useState('');
   const [creator, setCreator] = useState('');
+  console.log('questions are', questions);
 
   // Fetch the questions for the event
   useEffect(() => {
@@ -45,8 +46,9 @@ export default function Questionnaire() {
           }
         );
         if (questionnaireRes.ok) {
-          const questionnaire = await questionnaireRes.json();
-          setQuestions(questionnaire);
+          const q = await questionnaireRes.json();
+          console.log(q);
+          setQuestions(q);
         } else {
           console.log('Failed to get Questionnaire');
         }
@@ -69,7 +71,7 @@ export default function Questionnaire() {
 
   // Submit the answers
   const handleSubmit = () => {
-    fetch('/post-answers', {
+    fetch('event/post-answers', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -101,7 +103,7 @@ export default function Questionnaire() {
   };
 
   return (
-    <div>
+    <div style={{ marginTop: '100px' }}>
       <Typography>Event Name: {title}</Typography>
       <Typography>Creator: {creator}</Typography>
       <TextField

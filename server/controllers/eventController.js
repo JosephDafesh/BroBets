@@ -51,12 +51,14 @@ const newBet = async (req, res, next) => {
   const { type, question, points } = req.body;
   try {
     // add a row of new bet to table
-    await db.query(
-      'INSERT INTO bets ' +
-        '(event_id, type, question, points) ' +
-        'VALUES($1, $2, $3, $4);',
+    const newBetData = await db.query(
+      `INSERT INTO bets 
+        (event_id, type, question, points)
+        VALUES($1, $2, $3, $4)
+        RETURNING *;`,
       [event_id, type, question, points]
     );
+    res.locals.newBet = newBetData.rows[0];
     // update total_points in events table
     await db.query(
       'UPDATE events SET total_points = total_points + $1 WHERE event_id = $2;',
@@ -186,10 +188,11 @@ const getQuestionnaire = async (req, res, next) => {
   const { event_id } = req.params;
   try {
     const betQueryRes = await db.query(
-      'SELECT type, question, points FROM bets WHERE event_id = $1;',
+      'SELECT type, question, points, bet_id FROM bets WHERE event_id = $1;',
       [event_id]
     );
     res.locals.questionnaire = betQueryRes.rows;
+    console.log(res.locals.questionnaire);
     return next();
   } catch (e) {
     return next({
@@ -208,7 +211,7 @@ const postAnswers = async (req, res, next) => {
   try {
     // Check if missed last_call
     const eventQueryRes = await db.query(
-      'SELECT last_call FROM events WHERE events_id = $1;',
+      'SELECT last_call FROM events WHERE event_id = $1;',
       [event_id]
     );
     const { last_call } = eventQueryRes.rows[0];
@@ -304,6 +307,33 @@ const checkDuplicateUserInEvent = async (req, res, next) => {
   }
 };
 
+const getAdminEvents = async (req, res, next) => {
+  const { user_id } = req.params;
+  try {
+    const eventsQueryRes = await db.query(
+      'SELECT * FROM events WHERE admin = $1;',
+      [user_id]
+    );
+    const adminEvents = eventsQueryRes.rows;
+    res.locals.adminEvents = [];
+    for (const adminEvent of adminEvents) {
+      const scoreQueryRes = await db.query(
+        'SELECT * FROM scores WHERE user_id = $1 AND event_id = $2;',
+        [user_id, adminEvent.event_id]
+      );
+      res.locals.adminEvents.push({ ...adminEvent, ...scoreQueryRes.rows[0] });
+    }
+    return next();
+  } catch (e) {
+    return next({
+      log: 'Express Caught eventController.getAdminEvents middleware error' + e,
+      message: {
+        err: 'An error occurred when getting admin events for a user' + e,
+      },
+    });
+  }
+};
+
 module.exports = {
   getLeaderboard,
   newEvent,
@@ -316,4 +346,5 @@ module.exports = {
   getEventsForUser,
   getEventTitleAndCreator,
   checkDuplicateUserInEvent,
+  getAdminEvents,
 };
