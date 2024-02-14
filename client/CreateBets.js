@@ -65,10 +65,13 @@ export default function CreateBets() {
               {/* <Button>Delete</Button> */}
             </Stack>
           ))}
-          <Chip label='Yes or No' onClick={() => setNewBetType('true_false')} />
+          <Chip label='Yes or No' 
+            color={newBetType === 'true_false' ? 'secondary' : 'default'}
+            onClick={() => setNewBetType('true_false')} />
           <Chip
             label='Player Input'
-            onClick={() => setNewBetType('Player Input')}
+            color={newBetType === 'player_input' ? 'secondary' : 'default'}
+            onClick={() => setNewBetType('player_input')}
           />
         </Box>
         {newBetType !== null && (
@@ -84,14 +87,14 @@ export default function CreateBets() {
               value={newBetPoints}
               onChange={(e) => setNewBetPoints(e.target.value)}
             />
-            <Button onClick={handleAddBet} variant='contained' color='success'>
+            <Button onClick={handleAddBet} variant='contained' color='primary'>
               Add Bet
             </Button>
           </Box>
         )}
         <Button
           variant='contained'
-          color='success'
+          color='primary'
           onClick={() => navigate('/questionnaire')}
         >
           Finish!

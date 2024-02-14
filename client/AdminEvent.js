@@ -206,16 +206,16 @@ export default function AdminEvent() {
         <Typography variant='h5'>Add Bets!</Typography>
         <Chip
           label='true or false'
-          color={newBetType === 'true_false' ? 'primary' : 'default'}
+          color={newBetType === 'true_false' ? 'secondary' : 'default'}
           onClick={() =>
-            setNewBetType(newBetType === null ? 'true_false' : null)
+            setNewBetType('true_false')
           }
         />
         <Chip
           label='Player Input'
-          color={newBetType === 'player_input' ? 'primary' : 'default'}
+          color={newBetType === 'player_input' ? 'secondary' : 'default'}
           onClick={() =>
-            setNewBetType(newBetType === null ? 'player_input' : null)
+            setNewBetType('player_input')
           }
         />
       </Box>
@@ -229,7 +229,7 @@ export default function AdminEvent() {
               value={newBetPoints}
               onChange={updateNewBetPoints}
             />
-            <Button onClick={handleAddBet} variant='contained' color='success'>
+            <Button onClick={handleAddBet} variant='contained' color='primary'>
               Add Bet
             </Button>
           </Box>
@@ -239,7 +239,7 @@ export default function AdminEvent() {
         {questions.map((question, i) => renderQuestion(question, i))}
         <Button
           variant='contained'
-          color='success'
+          color='primary'
           onClick={handleSubmitCorrectAnswers}
           sx={{ marginTop: 2 }}
         >
