@@ -17,8 +17,8 @@ export default function NavBar() {
     navigate('/');
   };
 
-  const handleScoreBoardClick = () => {
-    navigate('/scoreboard');
+  const handlePageClick = (pageStr) => {
+    navigate(`/${pageStr}`);
   }
 
   return (
@@ -66,11 +66,11 @@ export default function NavBar() {
           >
             <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
               {/* Simplified Buttons without Typography and with a light blue color */}
-              <Button sx={{ color: 'black' }}> Dashboard </Button>
-              <Button sx={{ color: 'black' }}>Events </Button>
-              <Button sx={{ color: 'black' }}>Create Event </Button>
-              <Button sx={{ color: 'black' }} onClick={handleScoreBoardClick}>ScoreBoard </Button>
-              <Button sx={{ color: 'black' }}>Something else </Button>
+              <Button sx={{ color: 'black' }} onClick={() => handlePageClick('Dashboard')}> Dashboard </Button>
+              <Button sx={{ color: 'black' }} onClick={() => handlePageClick('Events')}>Events </Button>
+              <Button sx={{ color: 'black' }} onClick={() => handlePageClick('newEvent')}>Create Event </Button>
+              <Button sx={{ color: 'black' }} onClick={() => handlePageClick('Scoreboard')}>ScoreBoard </Button>
+              <Button sx={{ color: 'black' }} onClick={() => handlePageClick('EventAnswer')}>Something else </Button>
             </Box>
           </Box>
           <Button

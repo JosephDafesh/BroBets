@@ -67,9 +67,7 @@ export default function NewEvent() {
     // query db to insert new event
     const timestampDateTime = combineDateTime();
 
-    // const addEventResponse = await fetch(`/api/event/new/:${user_id}`, {
-
-    const addEventResponse = await fetch(`/event/new/3`, {
+    const addEventResponse = await fetch(`/event/new/:${user_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
