@@ -13,26 +13,49 @@ import {
 } from '@mui/material';
 import { useStore } from './store';
 
-export default function Questionnaire({ eventId, userId }) {
-  const initialNickname = useStore.getState().nickname;
+export default function Questionnaire() {
+  const initialNickname = useStore((state) => state.nickname);
+  const { event_id, user_id } = useStore.getState();
+  console.log('event_id is', event_id);
   const [questions, setQuestions] = useState([]); // State to hold the questions
   const [answers, setAnswers] = useState({}); // { betId: answer }
   const [nickname, setNickname] = useState(initialNickname); // State to hold the nickname
+  const [title, setTitle] = useState('');
+  const [creator, setCreator] = useState('');
 
   // Fetch the questions for the event
   useEffect(() => {
-    fetch(`/get-questionnaire/${eventId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setQuestions(data.questionnaire);
-        let initialAnswers = {};
-        data.questionnaire.forEach((question) => {
-          initialAnswers[question.bet_id] = '';
-        });
-        setAnswers(initialAnswers);
-      })
-      .catch((error) => console.error("Couldn't fetch questions:", error));
-  }, [eventId]);
+    const fetchData = async () => {
+      const titleCreatorRes = await fetch(
+        `/event/title-and-creator/${event_id}`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+      if (titleCreatorRes.ok) {
+        const data = await titleCreatorRes.json();
+        setTitle(data.title);
+        setCreator(data.creator);
+        const questionnaireRes = await fetch(
+          `/event/get-questionnaire/${event_id}`,
+          {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
+        if (questionnaireRes.ok) {
+          const questionnaire = await questionnaireRes.json();
+          setQuestions(questionnaire);
+        } else {
+          console.log('Failed to get Questionnaire');
+        }
+      } else {
+        console.log('Faied to get title and creator');
+      }
+    };
+    fetchData();
+  }, [event_id]);
 
   // Update the answers state when the user types in the answers
   const handleChange = (betId, answer) => {
@@ -52,9 +75,9 @@ export default function Questionnaire({ eventId, userId }) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        user_id: userId,
+        user_id,
         nickname,
-        event_id: eventId,
+        event_id,
         answers: Object.entries(answers).map(([betId, answer]) => ({
           bet_id: betId,
           answer,
@@ -79,6 +102,8 @@ export default function Questionnaire({ eventId, userId }) {
 
   return (
     <div>
+      <Typography>Event Name: {title}</Typography>
+      <Typography>Creator: {creator}</Typography>
       <TextField
         margin='dense'
         id='nickname'

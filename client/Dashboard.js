@@ -19,7 +19,6 @@ export default function Dashboard() {
       });
       if (userRes.ok) {
         const u = await userRes.json();
-        console.log('user from db is', u);
         setUser(u);
         const eventsRes = await fetch(`/event/events-for/${u.user_id}`, {
           method: 'GET',
@@ -34,7 +33,6 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  console.log('user is', user);
   return (
     <div id='dashboard'>
       <div id='navbar'>

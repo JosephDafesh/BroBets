@@ -49,4 +49,10 @@ router.get(
   (req, res) => res.status(200).send(res.locals.events)
 );
 
+router.get(
+  '/title-and-creator/:event_id',
+  eventController.getEventTitleAndCreator,
+  (req, res) => res.status(200).send(res.locals.eventTitleAndCreator)
+);
+
 module.exports = router;
