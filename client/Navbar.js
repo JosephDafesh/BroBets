@@ -14,7 +14,7 @@ export default function NavBar() {
   const navigate = useNavigate();
 
   const handleHomeClick = () => {
-    navigate('/');
+    navigate('/dashboard');
   };
 
   const handlePageClick = (pageStr) => {

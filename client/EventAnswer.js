@@ -31,6 +31,16 @@ export default function EventAnswer() {
     fetchData();
   }, []);
 
+  const renderComponent = () => {
+    if (!user) return null; 
+
+    if (user.isAdmin) {
+      return <AdminEvent user_id={user.user_id} events={events} />;
+    } else {
+      return <Questionnaire user_id={user.user_id} events={events} />;
+    }
+  };
+
   console.log('user is', user);
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -42,7 +52,7 @@ export default function EventAnswer() {
         width: '100%', 
         paddingTop: '12vh'
       }}>
-        <Questionnaire user_id={user} />
+       {renderComponent()}
       </Box>
     </div>
   );

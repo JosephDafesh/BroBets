@@ -12,6 +12,7 @@ import {
   } from "react-router-dom";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import AdminEvent from "./AdminEvent";
   
 
 function App() {
