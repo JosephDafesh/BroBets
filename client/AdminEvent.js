@@ -80,8 +80,7 @@ export default function AdminEvent({ event_id }) {
     })
     const newBet = await addBetRes.json();
     console.log('newBetData:', newBet);
-    setQuestions(prev => [...prev, newBet]);
-    console.log('questions:', questions);
+    setQuestions(prev => [...prev, ...newBet]);
   };
 
   const handleAnswerChange = (betId, answer) => {
