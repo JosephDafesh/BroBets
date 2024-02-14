@@ -335,6 +335,7 @@ const getAdminEvents = async (req, res, next) => {
 };
 
 const deleteEvent = async (req, res, next) => {
+  console.log('deleteEvent')
   const { event_id } = req.params;
   try {
     await db.query('DELETE FROM events WHERE event_id = $1;', [event_id]);
