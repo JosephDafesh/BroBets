@@ -26,14 +26,12 @@ const newEvent = (req, res, next) => {
   return db
     .query(
       'INSERT INTO events ' +
-        '(event_title, last_call, has_ended, admin, total_points, created_at) ' +
-        'VALUES($1, $2, $3, $4, $5, $6) RETURNING event_id;',
-      [event_title, last_call, false, user_id, 0, new Date().toISOString()]
+        '(event_title, last_call, has_ended, admin, total_points, created_at, players_count) ' +
+        'VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING event_id;',
+      [event_title, last_call, false, user_id, 0, new Date().toISOString(), 0]
     )
     .then((data) => {
-      console.log('newEvent rows:', data.rows);
       res.locals.newEvent_id = data.rows[0];
-      console.log('newEvent:', res.locals.newEvent);
       return next();
     })
     .catch((err) =>
@@ -200,7 +198,6 @@ const getQuestionnaire = async (req, res, next) => {
       [event_id]
     );
     res.locals.questionnaire = betQueryRes.rows;
-    console.log(res.locals.questionnaire);
     return next();
   } catch (e) {
     return next({
@@ -274,7 +271,7 @@ const getEventsForUser = async (req, res, next) => {
           'FROM events WHERE event_id = $1;',
         [event_id]
       );
-      const event = events.find((item) => (item.event_id = event_id));
+      const event = events.find((item) => item.event_id === event_id);
       res.locals.events.push({ ...event, ...eventQueryRes.rows[0] });
     }
     return next();
@@ -343,7 +340,6 @@ const getAdminEvents = async (req, res, next) => {
 };
 
 const deleteEvent = async (req, res, next) => {
-  console.log('deleteEvent');
   const { event_id } = req.params;
   try {
     await db.query('DELETE FROM events WHERE event_id = $1;', [event_id]);
@@ -358,6 +354,24 @@ const deleteEvent = async (req, res, next) => {
       },
     });
   }
+};
+
+const getAnswers = async (req, res, next) => {
+  const { event_id } = req.params;
+  try {
+    const betQueryRes = await db.query(
+      'SELECT * FROM bets WHERE event_id = $1;',
+      [event_id]
+    );
+    const bets = betQueryRes.rows;
+    res.locals.answers = {};
+    for (const { bet_id } of bets) {
+      const answerQueryRes = await db.query(
+        'SELECT * FROM answers WHERE bet_id = $1;',
+        [bet_id]
+      );
+    }
+  } catch (e) {}
 };
 
 module.exports = {

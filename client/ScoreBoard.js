@@ -25,32 +25,53 @@ export default function ScoreBoard({ event_id }) {
   const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/leaderboard/${event_id}`)
-      .then(response => response.json())
-      .then(data => {
-        setUserData(data.map(({ user_id, ...remainingData }) => remainingData));
-      })
-      .catch(error => console.log('Error fetching user data:', error));
-
-    fetch(`/api/leaderboard/${event_id}/all-answers`)
-      .then(response => response.json())
-      .then(data => {
-        setAllUserAnswersData(data.map(({ question_id, ...remainingData }) => remainingData)); 
-      })
-      .catch(error => console.log('Error fetching all user answers:', error));
-
-    if (gameOver) {
-      fetch(`/get-questionnaire/${event_id}`)
-        .then(response => response.json())
-        .then(data => {
-          setQuestionsData(data.map(({ question_id, ...remainingData }) => remainingData));
-        })
-        .catch(error => console.log('Error fetching questions:', error));
-    }
+    const fetchData = async () => {
+      const leaderboardRes = await fetch(`/event/leaderboard/${event_id}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (leaderboardRes.ok) {
+        setUserData(leaderboardRes);
+      }
+    };
+    fetchData();
+    // fetch(`/event/leaderboard/${event_id}`)
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setUserData(data.map(({ user_id, ...remainingData }) => remainingData));
+    //   })
+    //   .catch((error) => console.log('Error fetching user data:', error));
+    // fetch(`/api/leaderboard/${event_id}/all-answers`)
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setAllUserAnswersData(
+    //       data.map(({ question_id, ...remainingData }) => remainingData)
+    //     );
+    //   })
+    //   .catch((error) => console.log('Error fetching all user answers:', error));
+    // if (gameOver) {
+    //   fetch(`/get-questionnaire/${event_id}`)
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       setQuestionsData(
+    //         data.map(({ question_id, ...remainingData }) => remainingData)
+    //       );
+    //     })
+    //     .catch((error) => console.log('Error fetching questions:', error));
+    // }
   }, [event_id, gameOver]);
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4, mt: 12, height: 900, width: '100%' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 4,
+        mt: 12,
+        height: 900,
+        width: '100%',
+      }}
+    >
       <DataGrid
         rows={userData}
         columns={userColumns}
