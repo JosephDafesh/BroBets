@@ -7,7 +7,7 @@ const getLeaderboard = async (req, res, next) => {
       'SELECT * FROM scores WHERE event_id = $1;',
       [event_id]
     );
-    res.locals.leaderboard = scoreQueryRes.rows[0];
+    res.locals.leaderboard = scoreQueryRes.rows;
     return next();
   } catch (err) {
     return next({
@@ -364,14 +364,23 @@ const getAnswers = async (req, res, next) => {
       [event_id]
     );
     const bets = betQueryRes.rows;
-    res.locals.answers = {};
-    for (const { bet_id } of bets) {
+    res.locals.answers = [];
+    for (const bet of bets) {
       const answerQueryRes = await db.query(
         'SELECT * FROM answers WHERE bet_id = $1;',
-        [bet_id]
+        [bet.bet_id]
       );
+      res.locals.answers.push({ ...bet, answers: answerQueryRes.rows });
+      return next();
     }
-  } catch (e) {}
+  } catch (e) {
+    return next({
+      log: 'Express Caught eventController.getAnswers middleware error' + e,
+      message: {
+        err: 'An error occurred when getting answers' + e,
+      },
+    });
+  }
 };
 
 module.exports = {
@@ -388,4 +397,5 @@ module.exports = {
   checkDuplicateUserInEvent,
   getAdminEvents,
   deleteEvent,
+  getAnswers,
 };

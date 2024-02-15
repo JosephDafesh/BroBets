@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
+import { useStore } from './store';
 
 const userColumns = [
   { field: 'nickname', headerName: 'Nickname', width: 150 },
@@ -18,12 +19,12 @@ const allUserAnswersColumns = [
   { field: 'usersAnswers', headerName: 'All User Answers', width: 300 },
 ];
 
-export default function ScoreBoard({ event_id }) {
-  const [userData, setUserData] = useState([]);
-  const [questionsData, setQuestionsData] = useState([]);
-  const [allUserAnswersData, setAllUserAnswersData] = useState([]);
-  const [gameOver, setGameOver] = useState(false);
-
+export default function ScoreBoard() {
+  const { event_id } = useStore.getState();
+  const [leaderboard, setLeaderBoard] = useState(null);
+  const [answers, setAnswers] = useState(null);
+  console.log(leaderboard);
+  console.log(answers);
   useEffect(() => {
     const fetchData = async () => {
       const leaderboardRes = await fetch(`/event/leaderboard/${event_id}`, {
@@ -31,7 +32,16 @@ export default function ScoreBoard({ event_id }) {
         headers: { 'Content-Type': 'application/json' },
       });
       if (leaderboardRes.ok) {
-        setUserData(leaderboardRes);
+        const l = await leaderboardRes.json();
+        setLeaderBoard(l);
+      }
+      const answersRes = await fetch(`/event/answers/${event_id}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (answersRes.ok) {
+        const a = await answersRes.json();
+        setAnswers(a);
       }
     };
     fetchData();
@@ -59,7 +69,7 @@ export default function ScoreBoard({ event_id }) {
     //     })
     //     .catch((error) => console.log('Error fetching questions:', error));
     // }
-  }, [event_id, gameOver]);
+  }, []);
 
   return (
     <Box
@@ -72,13 +82,16 @@ export default function ScoreBoard({ event_id }) {
         width: '100%',
       }}
     >
-      <DataGrid
-        rows={userData}
-        columns={userColumns}
-        pageSize={5}
-        disableRowSelectionOnClick
-      />
-      <DataGrid
+      {leaderboard && (
+        <DataGrid
+          rows={leaderboard}
+          columns={userColumns}
+          pageSize={5}
+          disableRowSelectionOnClick
+          getRowId={(row) => row.user_id}
+        />
+      )}
+      {/* <DataGrid
         rows={allUserAnswersData}
         columns={allUserAnswersColumns}
         pageSize={5}
@@ -91,7 +104,7 @@ export default function ScoreBoard({ event_id }) {
           pageSize={5}
           disableRowSelectionOnClick
         />
-      )}
+      )} */}
     </Box>
   );
 }
