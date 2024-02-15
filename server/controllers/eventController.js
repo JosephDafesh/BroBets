@@ -262,7 +262,7 @@ const getEventsForUser = async (req, res, next) => {
     res.locals.events = [];
     for (const { event_id } of events) {
       const eventQueryRes = await db.query(
-        'SELECT event_title, created_at, has_ended, total_points, players_count ' +
+        'SELECT event_title, created_at, has_ended, total_points, players_count, last_call ' +
           'FROM events WHERE event_id = $1;',
         [event_id]
       );

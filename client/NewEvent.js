@@ -105,7 +105,7 @@ export default function NewEvent() {
           <Button
             onClick={handleAddEvent}
             variant='contained'
-            color='success'
+            color='primary'
             sx={{ marginTop: '20px' }}
             fullWidth
           >

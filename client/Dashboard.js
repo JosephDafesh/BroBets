@@ -62,7 +62,9 @@ export default function Dashboard() {
         {events.map((event) => (
           <Card
             key={event.event_id}
-            sx={{ width: '100%', maxWidth: 800, my: 2, cursor: 'pointer' }}
+            sx={{ width: '100%', maxWidth: 800, my: 2, cursor: 'pointer', 
+              backgroundColor: 'secondary.light', '&:hover': {backgroundColor: 'secondary.main'}, 
+              boxShadow: 3}}
             onClick={() => handleCardClick(event.event_id)} 
           >
             <CardContent>
