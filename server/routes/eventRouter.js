@@ -19,7 +19,7 @@ router.post('/new-bet/:event_id', eventController.newBet, (req, res) =>
 
 router.post(
   '/update-correct-answer/:bet_id',
-  eventController.newBet,
+  eventController.updateCorrectAnswer,
   (req, res) => res.status(200).send(res.locals.newLeaderboard)
 );
 
@@ -30,7 +30,8 @@ router.post('/end/:event_id', eventController.setEventEnd, (req, res) =>
 router.post(
   '/update-ranking/:event_id',
   eventController.updateRanking,
-  eventController.getLeaderboard
+  eventController.getLeaderboard,
+  (req, res) => res.status(200).send(res.locals.leaderboard)
 );
 
 router.get(
@@ -70,5 +71,9 @@ router.get(
 router.delete('/:event_id', eventController.deleteEvent, (req, res) => {
   res.status(200).send({ message: res.locals.message });
 });
+
+router.get('/answers/:event_id', (req, res) =>
+  res.status(200).send(res.locals.answers)
+);
 
 module.exports = router;
