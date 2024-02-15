@@ -192,7 +192,7 @@ export default function AdminEvent() {
                       }
                     }}
                   >
-                    Update Correct Anser
+                    Update Correct Answer
                   </Button>
                 </CardActions>
               </Card>

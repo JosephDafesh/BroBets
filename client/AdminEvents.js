@@ -65,7 +65,9 @@ export default function AdminEvents() {
       {adminEvents.map((e) => (
         <Card
           key={e.event_id}
-          sx={{ width: '100%', maxWidth: 800, my: 2, position: 'relative' }}
+          sx={{ width: '100%', maxWidth: 800, my: 2, cursor: 'pointer', 
+            backgroundColor: 'secondary.light', '&:hover': {backgroundColor: 'secondary.main'}, 
+            boxShadow: 3}}
         >
           <CardContent
             sx={{

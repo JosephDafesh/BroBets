@@ -8,8 +8,10 @@ export default function Dashboard() {
   const [events, setEvents] = useState([]);
   console.log('events', events);
   const setUser_id = useStore((state) => state.setUser_id);
+  const setEvent_id = useStore((state) => state.setEvent_id);
   const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,7 +46,8 @@ export default function Dashboard() {
   }, [setUser_id]);
 
   const handleCardClick = (event_id) => {
-    navigate(`/scoreboard/${event_id}`);
+    navigate('/scoreboard');
+    setEvent_id(event_id);
   };
 
   return (
@@ -61,8 +64,10 @@ export default function Dashboard() {
         {events.map((event) => (
           <Card
             key={event.event_id}
-            sx={{ width: '100%', maxWidth: 800, my: 2, cursor: 'pointer' }}
-            onClick={() => handleCardClick(event.event_id)}
+            sx={{ width: '100%', maxWidth: 800, my: 2, cursor: 'pointer', 
+              backgroundColor: 'secondary.light', '&:hover': {backgroundColor: 'secondary.main'}, 
+              boxShadow: 3}}
+            onClick={() => handleCardClick(event.event_id)} 
           >
             <CardContent>
               <Typography variant='h5' component='h2'>

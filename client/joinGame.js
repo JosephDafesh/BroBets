@@ -69,6 +69,7 @@ export default function JoinGame() {
           component='form'
           sx={{
             width: '25ch',
+            backgroundColor: '#ffd7c1',
           }}
           spacing={2}
           noValidate

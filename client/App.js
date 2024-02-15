@@ -22,7 +22,6 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 function App() {
-
   const useStyles = makeStyles({
     '@global': {
       body: {
@@ -31,8 +30,10 @@ function App() {
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         backgroundAttachment: 'fixed',
-      }}});
-    
+      },
+    },
+  });
+
   const globalStyles = useStyles();
 
   const [currentForm, setCurrentForm] = useState('login');
@@ -85,7 +86,7 @@ function App() {
                 path='/newevent'
                 element={event_id ? <CreateBets /> : <NewEvent />}
               />
-              <Route path='scoreboard/:event_id' element={<ScoreBoard />} />
+              <Route path='/scoreboard' element={<ScoreBoard />} />
               <Route path='/eventanswer' element={<EventAnswer />} />
               <Route path='/questionnaire' element={<Questionnaire />} />
               <Route
