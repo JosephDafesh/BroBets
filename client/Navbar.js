@@ -53,6 +53,8 @@ export default function NavBar() {
               maxHeight: 40,
               border: '1px solid',
               borderColor: 'divider',
+              boxShadow: 1,
+              backgroundImage: 'radial-gradient(#E4FDE1, #ABEBC6)',
             }}
           >
             <IconButton
