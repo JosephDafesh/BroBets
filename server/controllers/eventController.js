@@ -7,7 +7,7 @@ const getLeaderboard = async (req, res, next) => {
       'SELECT * FROM scores WHERE event_id = $1;',
       [event_id]
     );
-    res.locals.leaderboard = scoreQueryRes.rows[0];
+    res.locals.leaderboard = scoreQueryRes.rows;
     return next();
   } catch (err) {
     return next({
@@ -26,14 +26,12 @@ const newEvent = (req, res, next) => {
   return db
     .query(
       'INSERT INTO events ' +
-        '(event_title, last_call, has_ended, admin, total_points, created_at) ' +
-        'VALUES($1, $2, $3, $4, $5, $6) RETURNING event_id;',
-      [event_title, last_call, false, user_id, 0, new Date().toISOString()]
+        '(event_title, last_call, has_ended, admin, total_points, created_at, players_count) ' +
+        'VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING event_id;',
+      [event_title, last_call, false, user_id, 0, new Date().toISOString(), 0]
     )
     .then((data) => {
-      console.log('newEvent rows:', data.rows);
       res.locals.newEvent_id = data.rows[0];
-      console.log('newEvent:', res.locals.newEvent);
       return next();
     })
     .catch((err) =>
@@ -94,9 +92,16 @@ const updateCorrectAnswer = async (req, res, next) => {
     const answers = answerQueryRes.rows;
     const newLeaderboard = [];
     for (const { user_id, answer } of answers) {
+      const scoreQueryRes1 = await db.query(
+        'SELECT score FROM scores WHERE user_id = $1 AND event_id = $2',
+        [user_id, event_id]
+      );
+      let { score } = scoreQueryRes1.rows[0];
+      if (!score) score = 0;
+      score += answer === correct_answer ? points : 0;
       const scoreQueryRes = await db.query(
-        'UPDATE scores SET score = score + $1 WHERE user_id = $2 AND event_id = $3 RETURNING user_id, score;',
-        [answer === correct_answer ? points : 0, user_id, event_id]
+        'UPDATE scores SET score = $1 WHERE user_id = $2 AND event_id = $3 RETURNING user_id, score;',
+        [score, user_id, event_id]
       );
       newLeaderboard.push(scoreQueryRes.rows[0]);
     }
@@ -134,6 +139,7 @@ const setEventEnd = async (req, res, next) => {
 
 const updateRanking = async (req, res, next) => {
   const { playerRanking } = req.body;
+  const { event_id } = req.params;
   try {
     for (const { user_id, place } of playerRanking) {
       await db.query(
@@ -188,11 +194,10 @@ const getQuestionnaire = async (req, res, next) => {
   const { event_id } = req.params;
   try {
     const betQueryRes = await db.query(
-      'SELECT type, question, points, bet_id FROM bets WHERE event_id = $1;',
+      'SELECT type, question, points, bet_id, correct_answer FROM bets WHERE event_id = $1;',
       [event_id]
     );
     res.locals.questionnaire = betQueryRes.rows;
-    console.log(res.locals.questionnaire);
     return next();
   } catch (e) {
     return next({
@@ -266,7 +271,7 @@ const getEventsForUser = async (req, res, next) => {
           'FROM events WHERE event_id = $1;',
         [event_id]
       );
-      const event = events.find((item) => (item.event_id = event_id));
+      const event = events.find((item) => item.event_id === event_id);
       res.locals.events.push({ ...event, ...eventQueryRes.rows[0] });
     }
     return next();
@@ -335,7 +340,6 @@ const getAdminEvents = async (req, res, next) => {
 };
 
 const deleteEvent = async (req, res, next) => {
-  console.log('deleteEvent')
   const { event_id } = req.params;
   try {
     await db.query('DELETE FROM events WHERE event_id = $1;', [event_id]);
@@ -347,6 +351,33 @@ const deleteEvent = async (req, res, next) => {
       log: 'Express Caught eventController.deleteEvent middleware error' + e,
       message: {
         err: 'An error occurred when deleting an event' + e,
+      },
+    });
+  }
+};
+
+const getAnswers = async (req, res, next) => {
+  const { event_id } = req.params;
+  try {
+    const betQueryRes = await db.query(
+      'SELECT * FROM bets WHERE event_id = $1;',
+      [event_id]
+    );
+    const bets = betQueryRes.rows;
+    res.locals.answers = [];
+    for (const bet of bets) {
+      const answerQueryRes = await db.query(
+        'SELECT * FROM answers WHERE bet_id = $1;',
+        [bet.bet_id]
+      );
+      res.locals.answers.push({ ...bet, answers: answerQueryRes.rows });
+      return next();
+    }
+  } catch (e) {
+    return next({
+      log: 'Express Caught eventController.getAnswers middleware error' + e,
+      message: {
+        err: 'An error occurred when getting answers' + e,
       },
     });
   }
@@ -366,4 +397,5 @@ module.exports = {
   checkDuplicateUserInEvent,
   getAdminEvents,
   deleteEvent,
+  getAnswers,
 };

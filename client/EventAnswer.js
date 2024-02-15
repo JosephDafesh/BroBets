@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from "react";
-import Navbar from "./Navbar";
-import Questionnaire from "./Questionnaire";
-import { Box } from "@mui/material";
+import React, { useState, useEffect } from 'react';
+import Navbar from './Navbar';
+import Questionnaire from './Questionnaire';
+import { Box } from '@mui/material';
+import AdminEvent from './AdminEvent';
 
 export default function EventAnswer() {
   const [user, setUser] = useState(null);
@@ -23,7 +24,7 @@ export default function EventAnswer() {
         });
         if (eventsRes.ok) {
           const e = await eventsRes.json();
-          console.log(e)
+          console.log(e);
           setEvents(e);
         }
       }
@@ -32,7 +33,7 @@ export default function EventAnswer() {
   }, []);
 
   const renderComponent = () => {
-    if (!user) return null; 
+    if (!user) return null;
 
     if (user.isAdmin) {
       return <AdminEvent user_id={user.user_id} events={events} />;
@@ -45,13 +46,15 @@ export default function EventAnswer() {
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <Navbar />
-      <Box style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        height: '100vh', 
-        width: '100%', 
-        paddingTop: '12vh'
-      }}>
+      <Box
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          height: '100vh',
+          width: '100%',
+          paddingTop: '12vh',
+        }}
+      >
         {renderComponent()}
       </Box>
     </div>

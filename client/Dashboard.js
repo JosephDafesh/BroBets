@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, Typography, Box } from '@mui/material';
 import { useStore } from './store';
 import dayjs from 'dayjs';
 
 export default function Dashboard() {
   const [events, setEvents] = useState([]);
+  console.log('events', events);
   const setUser_id = useStore((state) => state.setUser_id);
+  const setEvent_id = useStore((state) => state.setEvent_id);
   const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
   const setEvent_id = useStore((state) => state.setEvent_id);
   const navigate = useNavigate(); 
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,8 +47,8 @@ export default function Dashboard() {
   }, [setUser_id]);
 
   const handleCardClick = (event_id) => {
+    navigate('/scoreboard');
     setEvent_id(event_id);
-    navigate(`/scoreboard/${event_id}`); 
   };
 
   return (

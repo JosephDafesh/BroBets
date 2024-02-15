@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FormControl, Box, TextField, Button, Typography } from '@mui/material';
-import { DatePicker, TimeField } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -27,8 +27,6 @@ export default function NewEvent() {
   const [lastCallDate, setLastCallDate] = useState(null);
   const [lastCallTime, setLastCallTime] = useState(null);
   const setSnackbarMessage = useStore((state) => state.setSnackbarMessage);
-
-  const updateEventName = (e) => setEventName(e.target.value);
 
   const updateLastCallDate = (newTimestamp) => {
     newTimestamp = dayjs(newTimestamp).format('YYYY-MM-DD');
@@ -80,27 +78,41 @@ export default function NewEvent() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box sx={{ marginTop: '100px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-        <Typography variant='h4' sx={{ marginBottom: '20px' }}>Create a New Event!</Typography>
+      <Box
+        sx={{
+          marginTop: '100px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          width: '100%',
+        }}
+      >
+        <Typography variant='h4' sx={{ marginBottom: '20px' }}>
+          Create a New Event!
+        </Typography>
         <FormControl sx={{ width: '90%', maxWidth: '500px' }}>
           <TextField
             label='Event Name'
             value={eventName}
             onChange={(e) => setEventName(e.target.value)}
             fullWidth
-            margin="normal"
+            margin='normal'
           />
           <DatePicker
             label='Last call date'
             value={lastCallDate}
-            onChange={setLastCallDate}
-            renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
+            onChange={updateLastCallDate}
+            renderInput={(params) => (
+              <TextField {...params} fullWidth margin='normal' />
+            )}
           />
           <TimePicker
             label='Last call time'
             value={lastCallTime}
-            onChange={setLastCallTime}
-            renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
+            onChange={updateLastCallTime}
+            renderInput={(params) => (
+              <TextField {...params} fullWidth margin='normal' />
+            )}
           />
           <Button
             onClick={handleAddEvent}
